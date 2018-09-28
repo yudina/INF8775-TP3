@@ -18,7 +18,7 @@ import numpy as np
 
 #file1 = sys.argv[1]
 #file2 = sys.argv[2]
-start_time = time.time()
+
 def conv(ex1, ex2):  
     
     X = []
@@ -48,15 +48,16 @@ def conv(ex1, ex2):
            for k in range(len(Y)):
                result[i][j] += X[i][k] * Y[k][j]  
     for r in result:
-       print(r)      
+       print(r)  
+    print("--- %s seconds ---" % (time.time() - start_time)) #TO DO: write to CSV the time taken to run program
     
 if __name__ == "__main__":
     
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--ex1', default='ex1.1', type=str)
-    parser.add_argument('--ex2', default='ex1.2', type=str)
-    args = parser.parse_args() 
+#    parser = argparse.ArgumentParser()
+#    parser.add_argument('--ex1', default='ex1.1', type=str)
+#    parser.add_argument('--ex2', default='ex1.2', type=str)
+#    args = parser.parse_args()
+    start_time = time.time()
+    conv("ex1.1", "ex1.2")
     
-    conv(args.ex1, args.ex2)
     #conv('ex1.1', 'ex1.2')
-    print("--- %s seconds ---" % (time.time() - start_time))
