@@ -73,4 +73,4 @@ if __name__ == "__main__":
     conv("ex1.1", "ex1.4")
     conv("ex1.1", "ex1.5")
     
-    print(len(times))
+    print(times)
