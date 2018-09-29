@@ -126,5 +126,11 @@ if __name__ == "__main__":
     
     print(times)
     
-    wtr = csv.writer(open ('out.csv', 'w'), delimiter=',', lineterminator='\n')
-    for x in times : wtr.writerow ([x])
+
+csvfile = "out.csv"
+
+#Assuming res is a flat list
+with open(csvfile, "w") as output:
+    writer = csv.writer(output, lineterminator='\n')
+    for t in times:
+        writer.writerow([t])    
