@@ -19,6 +19,8 @@ import numpy as np
 #file1 = sys.argv[1]
 #file2 = sys.argv[2]
 
+global times
+
 def conv(ex1, ex2):  
     
     X = []
@@ -48,8 +50,13 @@ def conv(ex1, ex2):
            for k in range(len(Y)):
                result[i][j] += X[i][k] * Y[k][j]  
     for r in result:
-       print(r)  
-    print("--- %s seconds ---" % (time.time() - start_time)) #TO DO: write to CSV the time taken to run program
+       print(r) 
+       
+    runtime = time.time() - start_time   
+    global times
+    times.append(runtime)
+       
+    #print("--- %s seconds ---" % (time.time() - start_time)) #TO DO: write to CSV the time taken to run program
     
 if __name__ == "__main__":
     
@@ -58,6 +65,19 @@ if __name__ == "__main__":
 #    parser.add_argument('--ex2', default='ex1.2', type=str)
 #    args = parser.parse_args()
     start_time = time.time()
+    matrice1 = ""
+    matrice2 = ""
+    global times
+    
+    print("starts")
+      
     conv("ex1.1", "ex1.2")
+    conv("ex1.1", "ex1.3")
+    conv("ex1.1", "ex1.4")
+    conv("ex1.1", "ex1.5")
+    
+    
+    for t in times:
+       print(t)
     
     #conv('ex1.1', 'ex1.2')
