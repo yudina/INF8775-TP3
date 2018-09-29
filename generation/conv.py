@@ -21,11 +21,11 @@ import numpy as np
 
 #global times
 
+global times
+times = []
+
 def conv(ex1, ex2):
     
-    
-    global times
-    times = []
     start_time = time.time()
     X = []
     Y = []
