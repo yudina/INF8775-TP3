@@ -15,6 +15,7 @@ import argparse
 import time
 import pandas as pd
 import numpy as np
+import csv
 
 #file1 = sys.argv[1]
 #file2 = sys.argv[2]
@@ -72,5 +73,58 @@ if __name__ == "__main__":
     conv("ex1.1", "ex1.3")
     conv("ex1.1", "ex1.4")
     conv("ex1.1", "ex1.5")
+    conv("ex1.2", "ex1.3")
+    conv("ex1.2", "ex1.4")
+    conv("ex1.2", "ex1.5")
+    conv("ex1.3", "ex1.4")
+    conv("ex1.3", "ex1.5")
+    conv("ex1.4", "ex1.5")
+    
+    conv("ex2.1", "ex2.2")
+    conv("ex2.1", "ex2.3")
+    conv("ex2.1", "ex2.4")
+    conv("ex2.1", "ex2.5")
+    conv("ex2.2", "ex2.3")
+    conv("ex2.2", "ex2.4")
+    conv("ex2.2", "ex2.5")
+    conv("ex2.3", "ex2.4")
+    conv("ex2.3", "ex2.5")
+    conv("ex2.4", "ex2.5")
+    
+    conv("ex3.1", "ex3.2")
+    conv("ex3.1", "ex3.3")
+    conv("ex3.1", "ex3.4")
+    conv("ex3.1", "ex3.5")
+    conv("ex3.2", "ex3.3")
+    conv("ex3.2", "ex3.4")
+    conv("ex3.2", "ex3.5")
+    conv("ex3.3", "ex3.4")
+    conv("ex3.3", "ex3.5")
+    conv("ex3.4", "ex3.5")
+    
+    conv("ex4.1", "ex4.2")
+    conv("ex4.1", "ex4.3")
+    conv("ex4.1", "ex4.4")
+    conv("ex4.1", "ex4.5")
+    conv("ex4.2", "ex4.3")
+    conv("ex4.2", "ex4.4")
+    conv("ex4.2", "ex4.5")
+    conv("ex4.3", "ex4.4")
+    conv("ex4.3", "ex4.5")
+    conv("ex4.4", "ex4.5")
+    
+    conv("ex5.1", "ex5.2")
+    conv("ex5.1", "ex5.3")
+    conv("ex5.1", "ex5.4")
+    conv("ex5.1", "ex5.5")
+    conv("ex5.2", "ex5.3")
+    conv("ex5.2", "ex5.4")
+    conv("ex5.2", "ex5.5")
+    conv("ex5.3", "ex5.4")
+    conv("ex5.3", "ex5.5")
+    conv("ex5.4", "ex5.5")
     
     print(times)
+    
+    wtr = csv.writer(open ('out.csv', 'w'), delimiter=',', lineterminator='\n')
+    for x in times : wtr.writerow ([x])
