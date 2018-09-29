@@ -19,10 +19,14 @@ import numpy as np
 #file1 = sys.argv[1]
 #file2 = sys.argv[2]
 
-global times
+#global times
 
-def conv(ex1, ex2):  
+def conv(ex1, ex2):
     
+    
+    global times
+    times = []
+    start_time = time.time()
     X = []
     Y = []
     
@@ -52,10 +56,8 @@ def conv(ex1, ex2):
     for r in result:
        print(r) 
        
-    runtime = time.time() - start_time   
-    global times
-    times.append(runtime)
-       
+    runtime = time.time() - start_time
+    times.append(runtime)   
     #print("--- %s seconds ---" % (time.time() - start_time)) #TO DO: write to CSV the time taken to run program
     
 if __name__ == "__main__":
@@ -63,21 +65,12 @@ if __name__ == "__main__":
 #    parser = argparse.ArgumentParser()
 #    parser.add_argument('--ex1', default='ex1.1', type=str)
 #    parser.add_argument('--ex2', default='ex1.2', type=str)
-#    args = parser.parse_args()
-    start_time = time.time()
-    matrice1 = ""
-    matrice2 = ""
-    global times
-    
-    print("starts")
+#    args = parser.parse_args(
+
       
     conv("ex1.1", "ex1.2")
     conv("ex1.1", "ex1.3")
     conv("ex1.1", "ex1.4")
     conv("ex1.1", "ex1.5")
     
-    
-    for t in times:
-       print(t)
-    
-    #conv('ex1.1', 'ex1.2')
+    print(len(times))
