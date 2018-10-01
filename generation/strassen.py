@@ -22,6 +22,9 @@ aN = int(aFile.readline())
 bN = int(bFile.readline())
 counter = 0
 
+global times
+times = []
+
 def genMatrix(fileName, d):
     newMatrix = []
     
@@ -102,24 +105,22 @@ if __name__ == "__main__":
     matrixA = np.matrix(matrixA)
     matrixB = np.matrix(matrixB)
     
+    start_time = time.time()
     matrixC = strassen(matrixA, matrixB)
+    runtime = time.time() - start_time
+    times.append(runtime)
+    
     listMatrixC = []
     lenA = len(matrixA)
     
-#    for i in range(len(matrixA)):
-#        for j in range(len(matrixA)):
-#            listMatrixC[i][j] = matrixC[i+j]
     listMatrixC = [[matrixC.item(((lenA*i)+j)) for i in range(len(matrixA))]for j in range(len(matrixA))]
-    
-    print("C =")
-    print(matrixC)
+
     print("listC =")
     print(listMatrixC)
     
-#    print(times)
-    
+    print(times)
 
-csvfile = "out.csv"
+csvfile = "outStrassen.csv"
 
 #Assuming res is a flat list
 with open(csvfile, "w") as output:

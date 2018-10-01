@@ -9,9 +9,7 @@
     # [6,7,3,0],
     # [4,5,9,1]]
 # result is 3x4
-
-import os
-import argparse
+    
 import time
 import pandas as pd
 import numpy as np
@@ -36,7 +34,6 @@ def conv(ex1, ex2):
             line = line.strip()
             if len(line) > 1:
                X.append([int(a) for a in line.split()])
-    print(len(X))
 
     with open(ex2,'r') as f2:
         for line in f2:
@@ -69,8 +66,6 @@ if __name__ == "__main__":
 
       
     conv("ex1.1", "ex1.2")
-#    print("1.1 and 1.2")
-#    print(result)
     conv("ex1.1", "ex1.3")
     conv("ex1.1", "ex1.4")
     conv("ex1.1", "ex1.5")
@@ -128,8 +123,7 @@ if __name__ == "__main__":
     print("times")
     print(times)
     
-
-csvfile = "out.csv"
+csvfile = "outConv.csv"
 
 #Assuming res is a flat list
 with open(csvfile, "w") as output:
