@@ -99,25 +99,22 @@ def strassen(mA, mB):
 if __name__ == "__main__":
     matrixA = genMatrix("ex1.1", aN)
     matrixB = genMatrix("ex1.2", bN)
-    
-    matA = matrixA
-    
     matrixA = np.matrix(matrixA)
     matrixB = np.matrix(matrixB)
     
-    matB = matrixA
+    matrixC = strassen(matrixA, matrixB)
+    listMatrixC = []
+    lenA = len(matrixA)
     
-    print("types of matrix")
-    print(matA)
-    print(matB)
-    
-    
-    matrixC = [[0 for i in range(len(matrixA))]for j in range(len(matrixA))]
-    
-    MatrixC = strassen(matrixA, matrixB)
+#    for i in range(len(matrixA)):
+#        for j in range(len(matrixA)):
+#            listMatrixC[i][j] = matrixC[i+j]
+    listMatrixC = [[matrixC.item(((lenA*i)+j)) for i in range(len(matrixA))]for j in range(len(matrixA))]
     
     print("C =")
-    print(MatrixC)
+    print(matrixC)
+    print("listC =")
+    print(listMatrixC)
     
 #    print(times)
     

@@ -57,7 +57,7 @@ def conv(ex1, ex2):
 #       print(r) 
        
     runtime = time.time() - start_time
-    times.append(runtime)   
+    times.append(runtime)
     #print("--- %s seconds ---" % (time.time() - start_time)) #TO DO: write to CSV the time taken to run program
     
 if __name__ == "__main__":
@@ -69,6 +69,8 @@ if __name__ == "__main__":
 
       
     conv("ex1.1", "ex1.2")
+#    print("1.1 and 1.2")
+#    print(result)
     conv("ex1.1", "ex1.3")
     conv("ex1.1", "ex1.4")
     conv("ex1.1", "ex1.5")
