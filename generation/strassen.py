@@ -5,190 +5,127 @@ Created on Sat Sep 29 17:29:27 2018
 @author: kevin
 """
 
+import numpy as np
+import sys
+import os
+import argparse
+import time
+import pandas as pd
+import csv
+
+#arg1 = sys.argv[1]
+#arg2 = sys.argv[2]
+aFile = open("ex1.1", 'r')
+bFile = open("ex1.2", 'r')
+global aN, bN # les exposants n
+aN = int(aFile.readline())
+bN = int(bFile.readline())
+counter = 0
+
+def genMatrix(fileName, d):
+    newMatrix = []
+    
+    with open(fileName,'r') as f1:
+        for line in f1:
+            line = line.strip()
+            if len(line) > 1:
+               newMatrix.append([int(a) for a in line.split()])
+    return newMatrix
+#    print(d)
+#    datalines = inFile
+#    newMatrix = []
+#
+#    for x in range(0,d):
+#        dataline = datalines.readline().split()
+#        for y in range(0,d):
+#            yVals = list(map(float, dataline))
+#
+#        newMatrix.append(yVals)
+#    return newMatrix
+
+def partitionMatrix(matrix):
+    length = len(matrix)
+    if(length % 2 is not 0):
+        stack = []
+        for x in range(length + 1):
+            stack.append(float(0))
+        length += 1
+        matrix = np.insert(matrix, len(matrix), values=0, axis=1)
+        matrix = np.vstack([matrix, stack])
+    d = (length // 2)
+    matrix = matrix.reshape(length, length)
+    completedPartition = [matrix[:d, :d], matrix[d:, :d], matrix[:d, d:], matrix[d:, d:]]
+    return completedPartition
+
+def strassen(mA, mB):
+    n1 = len(mA) # nbr de col
+    n2 = len(mB)
+    global aN
+    if(n1 and n2 <= aN): # hein ? faire un prodScal si la matrice est assez petite ?
+        return (mA * mB)
+    else:
+        print(mA)
+        A = partitionMatrix(mA)
+        B = partitionMatrix(mB)
+        mc = np.matrix([0 for i in range(len(mA))]for j in range(len(mB)))
+        C = partitionMatrix(mc)
 
 
-# PYTHON 2 #############
-# https://martin-thoma.com/strassen-algorithm-in-python-java-cpp/
-#
-#from optparse import OptionParser
-#from math import ceil, log
-#
-#def read(ex1, ex2):
-#    X = []
-#    Y = []
-#    
-#    with open(ex1,'r') as f1:
-#        for line in f1:
-#            line = line.strip()
-#            if len(line) > 1:
-#               X.append([int(a) for a in line.split()])
-#    print(X)
-#
-#    with open(ex2,'r') as f2:
-#        for line in f2:
-#            line = line.strip()
-#            if len(line) > 1:
-#               Y.append([int(a) for a in line.split()])
-#    print(Y)
-#    
-#    return X, Y
-##    lines = open(filename, 'r').read().splitlines()
-##    A = []
-##    B = []
-##    matrix = A
-##    for line in lines:
-##        if line != "":
-##            matrix.append(map(int, line.split("\t")))
-##        else:
-##            matrix = B
-##    return A, B
-#
-#def printMatrix(matrix):
-#    for line in matrix:
-#        print "\t".join(map(str,line))
-#
-#def ikjMatrixProduct(A, B):
-#    n = len(A)
-#    C = [[0 for i in xrange(n)] for j in xrange(n)]
-#    for i in xrange(n):
-#        for k in xrange(n):
-#            for j in xrange(n):
-#                C[i][j] += A[i][k] * B[k][j]
-#    return C
-#
-#def add(A, B):
-#    n = len(A)
-#    C = [[0 for j in xrange(0, n)] for i in xrange(0, n)]
-#    for i in xrange(0, n):
-#        for j in xrange(0, n):
-#            C[i][j] = A[i][j] + B[i][j]
-#    return C
-#
-#def subtract(A, B):
-#    n = len(A)
-#    C = [[0 for j in xrange(0, n)] for i in xrange(0, n)]
-#    for i in xrange(0, n):
-#        for j in xrange(0, n):
-#            C[i][j] = A[i][j] - B[i][j]
-#    return C
-#
-#def strassenR(A, B):
-#    """ 
-#        Implementation of the strassen algorithm.
-#    """
-#    n = len(A)
-#
-#    if n <= LEAF_SIZE:
-#        return ikjMatrixProduct(A, B)
-#    else:
-#        # initializing the new sub-matrices
-#        newSize = n/2
-#        a11 = [[0 for j in xrange(0, newSize)] for i in xrange(0, newSize)]
-#        a12 = [[0 for j in xrange(0, newSize)] for i in xrange(0, newSize)]
-#        a21 = [[0 for j in xrange(0, newSize)] for i in xrange(0, newSize)]
-#        a22 = [[0 for j in xrange(0, newSize)] for i in xrange(0, newSize)]
-#
-#        b11 = [[0 for j in xrange(0, newSize)] for i in xrange(0, newSize)]
-#        b12 = [[0 for j in xrange(0, newSize)] for i in xrange(0, newSize)]
-#        b21 = [[0 for j in xrange(0, newSize)] for i in xrange(0, newSize)]
-#        b22 = [[0 for j in xrange(0, newSize)] for i in xrange(0, newSize)]
-#
-#        aResult = [[0 for j in xrange(0, newSize)] for i in xrange(0, newSize)]
-#        bResult = [[0 for j in xrange(0, newSize)] for i in xrange(0, newSize)]
-#
-#        # dividing the matrices in 4 sub-matrices:
-#        for i in xrange(0, newSize):
-#            for j in xrange(0, newSize):
-#                a11[i][j] = A[i][j]            # top left
-#                a12[i][j] = A[i][j + newSize]    # top right
-#                a21[i][j] = A[i + newSize][j]    # bottom left
-#                a22[i][j] = A[i + newSize][j + newSize] # bottom right
-#
-#                b11[i][j] = B[i][j]            # top left
-#                b12[i][j] = B[i][j + newSize]    # top right
-#                b21[i][j] = B[i + newSize][j]    # bottom left
-#                b22[i][j] = B[i + newSize][j + newSize] # bottom right
-#
-#        # Calculating p1 to p7:
-#        aResult = add(a11, a22)
-#        bResult = add(b11, b22)
-#        p1 = strassenR(aResult, bResult) # p1 = (a11+a22) * (b11+b22)
-#
-#        aResult = add(a21, a22)      # a21 + a22
-#        p2 = strassenR(aResult, b11)  # p2 = (a21+a22) * (b11)
-#
-#        bResult = subtract(b12, b22) # b12 - b22
-#        p3 = strassenR(a11, bResult)  # p3 = (a11) * (b12 - b22)
-#
-#        bResult = subtract(b21, b11) # b21 - b11
-#        p4 =strassenR(a22, bResult)   # p4 = (a22) * (b21 - b11)
-#
-#        aResult = add(a11, a12)      # a11 + a12
-#        p5 = strassenR(aResult, b22)  # p5 = (a11+a12) * (b22)   
-#
-#        aResult = subtract(a21, a11) # a21 - a11
-#        bResult = add(b11, b12)      # b11 + b12
-#        p6 = strassenR(aResult, bResult) # p6 = (a21-a11) * (b11+b12)
-#
-#        aResult = subtract(a12, a22) # a12 - a22
-#        bResult = add(b21, b22)      # b21 + b22
-#        p7 = strassenR(aResult, bResult) # p7 = (a12-a22) * (b21+b22)
-#
-#        # calculating c21, c21, c11 e c22:
-#        c12 = add(p3, p5) # c12 = p3 + p5
-#        c21 = add(p2, p4)  # c21 = p2 + p4
-#
-#        aResult = add(p1, p4) # p1 + p4
-#        bResult = add(aResult, p7) # p1 + p4 + p7
-#        c11 = subtract(bResult, p5) # c11 = p1 + p4 - p5 + p7
-#
-#        aResult = add(p1, p3) # p1 + p3
-#        bResult = add(aResult, p6) # p1 + p3 + p6
-#        c22 = subtract(bResult, p2) # c22 = p1 + p3 - p2 + p6
-#
-#        # Grouping the results obtained in a single matrix:
-#        C = [[0 for j in xrange(0, n)] for i in xrange(0, n)]
-#        for i in xrange(0, newSize):
-#            for j in xrange(0, newSize):
-#                C[i][j] = c11[i][j]
-#                C[i][j + newSize] = c12[i][j]
-#                C[i + newSize][j] = c21[i][j]
-#                C[i + newSize][j + newSize] = c22[i][j]
-#        return C
-#
-#def strassen(A, B):
-#    assert type(A) == list and type(B) == list
-#    assert len(A) == len(A[0]) == len(B) == len(B[0])
-#
-#    # Make the matrices bigger so that you can apply the strassen
-#    # algorithm recursively without having to deal with odd
-#    # matrix sizes
-#    nextPowerOfTwo = lambda n: 2**int(ceil(log(n,2)))
-#    n = len(A)
-#    m = nextPowerOfTwo(n)
-#    APrep = [[0 for i in xrange(m)] for j in xrange(m)]
-#    BPrep = [[0 for i in xrange(m)] for j in xrange(m)]
-#    for i in xrange(n):
-#        for j in xrange(n):
-#            APrep[i][j] = A[i][j]
-#            BPrep[i][j] = B[i][j]
-#    CPrep = strassenR(APrep, BPrep)
-#    C = [[0 for i in xrange(n)] for j in xrange(n)]
-#    for i in xrange(n):
-#        for j in xrange(n):
-#            C[i][j] = CPrep[i][j]
-#    return C
-#
-#if __name__ == "__main__":
-#    parser = OptionParser()
-#    parser.add_option("-i", dest="filename", default="2000.in",
-#         help="input file with two matrices", metavar="FILE")
-#    parser.add_option("-l", dest="LEAF_SIZE", default="8",
-#         help="when do you start using ikj", metavar="LEAF_SIZE")
-#    (options, args) = parser.parse_args()
-#
-#    LEAF_SIZE = options.LEAF_SIZE
-#    A, B = read(options.filename)
-#
-#    C = strassen(A, B)
-#    printMatrix(C)
+        a11 = np.array(A[0])
+        a12 = np.array(A[2])
+        a21 = np.array(A[1])
+        a22 = np.array(A[3])
+
+        b11 = np.array(B[0])
+        b12 = np.array(B[2])
+        b21 = np.array(B[1])
+        b22 = np.array(B[3])
+
+        mone = np.array(strassen((a11 + a22), (b11 + b22)))
+        mtwo = np.array(strassen((a21 + a22), b11))
+        mthree = np.array(strassen(a11, (b12 - b22)))
+        mfour = np.array(strassen(a22, (b21 - b11)))
+        mfive = np.array(strassen((a11 + a12), b22))
+        msix = np.array(strassen((a21 - a11), (b11 + b12)))
+        mseven = np.array(strassen((a12 - a22), (b21 + b22)))
+
+        C[0] = np.array((mone + mfour - mfive + mseven))
+        C[2] = np.array((mthree + mfive))
+        C[1] = np.array((mtwo + mfour))
+        C[3] = np.array((mone - mtwo + mthree + msix))
+
+        return np.array(C)
+
+if __name__ == "__main__":
+    matrixA = genMatrix("ex1.1", aN)
+    matrixB = genMatrix("ex1.2", bN)
+    
+    matA = matrixA
+    
+    matrixA = np.matrix(matrixA)
+    matrixB = np.matrix(matrixB)
+    
+    matB = matrixA
+    
+    print("types of matrix")
+    print(matA)
+    print(matB)
+    
+    
+    matrixC = [[0 for i in range(len(matrixA))]for j in range(len(matrixA))]
+    
+    MatrixC = strassen(matrixA, matrixB)
+    
+    print("C =")
+    print(MatrixC)
+    
+#    print(times)
+    
+
+csvfile = "out.csv"
+
+#Assuming res is a flat list
+with open(csvfile, "w") as output:
+    writer = csv.writer(output, lineterminator='\n')
+    for t in times:
+        writer.writerow([t])  

@@ -36,14 +36,13 @@ def conv(ex1, ex2):
             line = line.strip()
             if len(line) > 1:
                X.append([int(a) for a in line.split()])
-    print(X)
+    print(len(X))
 
     with open(ex2,'r') as f2:
         for line in f2:
             line = line.strip()
             if len(line) > 1:
                Y.append([int(a) for a in line.split()])
-    print(Y)
 
     w, h = len(X[0]), len(Y[0]);
     result = [[0 for x in range(w)] for y in range(h)] 
@@ -54,8 +53,8 @@ def conv(ex1, ex2):
            # iterate through rows of Y
            for k in range(len(Y)):
                result[i][j] += X[i][k] * Y[k][j]  
-    for r in result:
-       print(r) 
+#    for r in result:
+#       print(r) 
        
     runtime = time.time() - start_time
     times.append(runtime)   
@@ -124,6 +123,7 @@ if __name__ == "__main__":
     conv("ex5.3", "ex5.5")
     conv("ex5.4", "ex5.5")
     
+    print("times")
     print(times)
     
 
