@@ -1,5 +1,3 @@
-# Program to multiply two matrices using nested loops
-
 import os
 import argparse
 import time
@@ -7,57 +5,45 @@ import pandas as pd
 import numpy as np
 import csv
 
-#file1 = sys.argv[1]
-#file2 = sys.argv[2]
-
-#global times
-
 global times
 times = []
 
-def conv(ex1, ex2):
+def extractMatrix(fileName):
+    newMatrix = []
     
-    start_time = time.time()
-    X = []
-    Y = []
-    
-    with open(ex1,'r') as f1:
+    with open(fileName,'r') as f1:
         for line in f1:
             line = line.strip()
             if len(line) > 1:
-               X.append([int(a) for a in line.split()])
-    print(X)
+               newMatrix.append([int(a) for a in line.split()])
+    return newMatrix
 
-    with open(ex2,'r') as f2:
-        for line in f2:
-            line = line.strip()
-            if len(line) > 1:
-               Y.append([int(a) for a in line.split()])
-    print(Y)
+def conv(matrixAName, matrixBName):
 
-    w, h = len(X[0]), len(Y[0]);
+    matrixA = []
+    matrixB = []
+    matrixA = extractMatrix(matrixAName)
+    matrixB = extractMatrix(matrixBName)
+    
+    start_time = time.time()
+    
+    w, h = len(matrixA[0]), len(matrixB[0]);
     result = [[0 for x in range(w)] for y in range(h)] 
     	
-    for i in range(len(X)):
+    for i in range(len(matrixA)):
        # iterate through columns of Y
-       for j in range(len(Y[0])):
+       for j in range(len(matrixB[0])):
            # iterate through rows of Y
-           for k in range(len(Y)):
-               result[i][j] += X[i][k] * Y[k][j]  
-    for r in result:
-       print(r) 
+           for k in range(len(matrixB)):
+               result[i][j] += matrixA[i][k] * matrixB[k][j]  
+#    for r in result:
+#       print(r) 
        
     runtime = time.time() - start_time
-    times.append(runtime)   
+    times.append(runtime)
     #print("--- %s seconds ---" % (time.time() - start_time)) #TO DO: write to CSV the time taken to run program
     
 if __name__ == "__main__":
-    
-#    parser = argparse.ArgumentParser()
-#    parser.add_argument('--ex1', default='ex1.1', type=str)
-#    parser.add_argument('--ex2', default='ex1.2', type=str)
-#    args = parser.parse_args(
-
       
     conv("ex1.1", "ex1.2")
     conv("ex1.1", "ex1.3")
@@ -114,10 +100,10 @@ if __name__ == "__main__":
     conv("ex5.3", "ex5.5")
     conv("ex5.4", "ex5.5")
     
+    print("times")
     print(times)
     
-
-csvfile = "out.csv"
+csvfile = "outConv.csv"
 
 #Assuming res is a flat list
 with open(csvfile, "w") as output:
