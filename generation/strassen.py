@@ -6,26 +6,20 @@ Created on Sat Sep 29 17:29:27 2018
 """
 
 import numpy as np
-import sys
-import os
-import argparse
 import time
 import pandas as pd
 import csv
 
-#arg1 = sys.argv[1]
-#arg2 = sys.argv[2]
 aFile = open("ex1.1", 'r')
 bFile = open("ex1.2", 'r')
 global aN, bN # les exposants n
 aN = int(aFile.readline())
 bN = int(bFile.readline())
-counter = 0
 
 global times
 times = []
 
-def genMatrix(fileName, d):
+def extractMatrix(fileName):
     newMatrix = []
     
     with open(fileName,'r') as f1:
@@ -34,17 +28,6 @@ def genMatrix(fileName, d):
             if len(line) > 1:
                newMatrix.append([int(a) for a in line.split()])
     return newMatrix
-#    print(d)
-#    datalines = inFile
-#    newMatrix = []
-#
-#    for x in range(0,d):
-#        dataline = datalines.readline().split()
-#        for y in range(0,d):
-#            yVals = list(map(float, dataline))
-#
-#        newMatrix.append(yVals)
-#    return newMatrix
 
 def partitionMatrix(matrix):
     length = len(matrix)
@@ -73,7 +56,6 @@ def strassen(mA, mB):
         mc = np.matrix([0 for i in range(len(mA))]for j in range(len(mB)))
         C = partitionMatrix(mc)
 
-
         a11 = np.array(A[0])
         a12 = np.array(A[2])
         a21 = np.array(A[1])
@@ -100,8 +82,8 @@ def strassen(mA, mB):
         return np.array(C)
 
 if __name__ == "__main__":
-    matrixA = genMatrix("ex1.1", aN)
-    matrixB = genMatrix("ex1.2", bN)
+    matrixA = extractMatrix("ex1.1")
+    matrixB = extractMatrix("ex1.2")
     matrixA = np.matrix(matrixA)
     matrixB = np.matrix(matrixB)
     
@@ -109,10 +91,12 @@ if __name__ == "__main__":
     matrixC = strassen(matrixA, matrixB)
     runtime = time.time() - start_time
     times.append(runtime)
-    
-    listMatrixC = []
+
     lenA = len(matrixA)
     
+    # init listMatrixC
+    listMatrixC = [[0 for i in range(len(matrixA))]for j in range(len(matrixA))]
+    # convertmatrixC from ndArray to list
     listMatrixC = [[matrixC.item(((lenA*i)+j)) for i in range(len(matrixA))]for j in range(len(matrixA))]
 
     print("listC =")

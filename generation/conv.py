@@ -1,55 +1,41 @@
-# Program to multiply two matrices using nested loops
-
-# 3x3 matrix
-# X = [[12,7,3],
-    # [4 ,5,6],
-    # [7 ,8,9]]
-# 3x4 matrix
-# Y = [[5,8,1,2],
-    # [6,7,3,0],
-    # [4,5,9,1]]
-# result is 3x4
+# Multiply two matrices using nested loops
     
 import time
 import pandas as pd
 import numpy as np
 import csv
 
-#file1 = sys.argv[1]
-#file2 = sys.argv[2]
-
-#global times
-
 global times
 times = []
 
-def conv(ex1, ex2):
+def extractMatrix(fileName):
+    newMatrix = []
     
-    start_time = time.time()
-    X = []
-    Y = []
-    
-    with open(ex1,'r') as f1:
+    with open(fileName,'r') as f1:
         for line in f1:
             line = line.strip()
             if len(line) > 1:
-               X.append([int(a) for a in line.split()])
+               newMatrix.append([int(a) for a in line.split()])
+    return newMatrix
 
-    with open(ex2,'r') as f2:
-        for line in f2:
-            line = line.strip()
-            if len(line) > 1:
-               Y.append([int(a) for a in line.split()])
+def conv(matrixAName, matrixBName):
 
-    w, h = len(X[0]), len(Y[0]);
+    matrixA = []
+    matrixB = []
+    matrixA = extractMatrix(matrixAName)
+    matrixB = extractMatrix(matrixBName)
+    
+    start_time = time.time()
+    
+    w, h = len(matrixA[0]), len(matrixB[0]);
     result = [[0 for x in range(w)] for y in range(h)] 
     	
-    for i in range(len(X)):
+    for i in range(len(matrixA)):
        # iterate through columns of Y
-       for j in range(len(Y[0])):
+       for j in range(len(matrixB[0])):
            # iterate through rows of Y
-           for k in range(len(Y)):
-               result[i][j] += X[i][k] * Y[k][j]  
+           for k in range(len(matrixB)):
+               result[i][j] += matrixA[i][k] * matrixB[k][j]  
 #    for r in result:
 #       print(r) 
        
@@ -58,12 +44,6 @@ def conv(ex1, ex2):
     #print("--- %s seconds ---" % (time.time() - start_time)) #TO DO: write to CSV the time taken to run program
     
 if __name__ == "__main__":
-    
-#    parser = argparse.ArgumentParser()
-#    parser.add_argument('--ex1', default='ex1.1', type=str)
-#    parser.add_argument('--ex2', default='ex1.2', type=str)
-#    args = parser.parse_args(
-
       
     conv("ex1.1", "ex1.2")
     conv("ex1.1", "ex1.3")
