@@ -55,9 +55,10 @@ def runBenchmark(baseThreshold, matSizes):
 	os.system("rm mat_*")
 	
 def findThreshold():
+    #KEVIN: init vars
 	matSize = 11
-	bestTreshold = 0
-	bestTime = sys.float_info.max
+	bestThreshold = 0
+	bestTime = sys.float_info.max #KEVIN: init to highest float value
 	
 	#Generate a test matrix
 	sp.call(['./Gen', str(matSize), 'mat.txt'])
