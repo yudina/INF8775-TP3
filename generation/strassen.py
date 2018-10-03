@@ -81,9 +81,9 @@ def strassen(mA, mB):
 
         return np.array(C)
 
-if __name__ == "__main__":
-    matrixA = extractMatrix("ex1.1")
-    matrixB = extractMatrix("ex1.2")
+def runStrassen(ex1, ex2):
+    matrixA = extractMatrix(ex1)
+    matrixB = extractMatrix(ex2)
     matrixA = np.matrix(matrixA)
     matrixB = np.matrix(matrixB)
     
@@ -91,7 +91,7 @@ if __name__ == "__main__":
     matrixC = strassen(matrixA, matrixB)
     runtime = time.time() - start_time
     times.append(runtime)
-
+    
     lenA = len(matrixA)
     
     # init listMatrixC
@@ -101,7 +101,64 @@ if __name__ == "__main__":
 
     print("listC =")
     print(listMatrixC)
+
+if __name__ == "__main__":
     
+    runStrassen("ex1.1","ex1.2")
+    runStrassen("ex1.1","ex1.3")
+    runStrassen("ex1.1","ex1.4")
+    runStrassen("ex1.1","ex1.5")
+    runStrassen("ex1.2","ex1.3")
+    runStrassen("ex1.2","ex1.4")
+    runStrassen("ex1.2","ex1.5")
+    runStrassen("ex1.3","ex1.4")
+    runStrassen("ex1.3","ex1.5")
+    runStrassen("ex1.4","ex1.5")
+    
+    runStrassen("ex2.1","ex2.2")
+    runStrassen("ex2.1","ex2.3")
+    runStrassen("ex2.1","ex2.4")
+    runStrassen("ex2.1","ex2.5")
+    runStrassen("ex2.2","ex2.3")
+    runStrassen("ex2.2","ex2.4")
+    runStrassen("ex2.2","ex2.5")
+    runStrassen("ex2.3","ex2.4")
+    runStrassen("ex2.3","ex2.5")
+    runStrassen("ex2.4","ex2.5")
+    
+    runStrassen("ex3.1","ex3.2")
+    runStrassen("ex3.1","ex3.3")
+    runStrassen("ex3.1","ex3.4")
+    runStrassen("ex3.1","ex3.5")
+    runStrassen("ex3.2","ex3.3")
+    runStrassen("ex3.2","ex3.4")
+    runStrassen("ex3.2","ex3.5")
+    runStrassen("ex3.3","ex3.4")
+    runStrassen("ex3.3","ex3.5")
+    runStrassen("ex3.4","ex3.5")
+    
+    runStrassen("ex4.1","ex4.2")
+    runStrassen("ex4.1","ex4.3")
+    runStrassen("ex4.1","ex4.4")
+    runStrassen("ex4.1","ex4.5")
+    runStrassen("ex4.2","ex4.3")
+    runStrassen("ex4.2","ex4.4")
+    runStrassen("ex4.2","ex4.5")
+    runStrassen("ex4.3","ex4.4")
+    runStrassen("ex4.3","ex4.5")
+    runStrassen("ex4.4","ex4.5")
+    
+    runStrassen("ex5.1","ex5.2")
+    runStrassen("ex5.1","ex5.3")
+    runStrassen("ex5.1","ex5.4")
+    runStrassen("ex5.1","ex5.5")
+    runStrassen("ex5.2","ex5.3")
+    runStrassen("ex5.2","ex5.4")
+    runStrassen("ex5.2","ex5.5")
+    runStrassen("ex5.3","ex5.4")
+    runStrassen("ex5.3","ex5.5")
+    runStrassen("ex5.4","ex5.5")
+      
     print(times)
 
 csvfile = "outStrassen.csv"
