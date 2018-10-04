@@ -50,7 +50,6 @@ def strassen(mA, mB):
     if(n1 and n2 <= aN): # hein ? faire un prodScal si la matrice est assez petite ?
         return (mA * mB)
     else:
-        print(mA)
         A = partitionMatrix(mA)
         B = partitionMatrix(mB)
         mc = np.matrix([0 for i in range(len(mA))]for j in range(len(mB)))
@@ -99,11 +98,10 @@ def runStrassen(ex1, ex2):
     # convertmatrixC from ndArray to list
     listMatrixC = [[matrixC.item(((lenA*i)+j)) for i in range(len(matrixA))]for j in range(len(matrixA))]
 
-    print("listC =")
-    print(listMatrixC)
-
 if __name__ == "__main__":
     
+    print("started strassen")
+    main_start_time = time.time()
     runStrassen("ex1.1","ex1.2")
     runStrassen("ex1.1","ex1.3")
     runStrassen("ex1.1","ex1.4")
@@ -158,8 +156,13 @@ if __name__ == "__main__":
     runStrassen("ex5.3","ex5.4")
     runStrassen("ex5.3","ex5.5")
     runStrassen("ex5.4","ex5.5")
-      
+    
+    main_runtime = time.time() - main_start_time
+    
+    
     print(times)
+    print("main_runtime : ")
+    print(main_runtime)
 
 csvfile = "outStrassen.csv"
 
