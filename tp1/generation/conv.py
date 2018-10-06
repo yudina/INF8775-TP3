@@ -1,8 +1,4 @@
-import os
-import argparse
 import time
-import pandas as pd
-import numpy as np
 import csv
 
 global times
