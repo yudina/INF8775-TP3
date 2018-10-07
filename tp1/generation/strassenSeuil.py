@@ -5,100 +5,174 @@ Created on Wed Oct  3 11:46:48 2018
 @author: kevin
 """
 
-# this is benchmark !!!!!!!!
+from optparse import OptionParser
+from math import ceil, log
 
-import subprocess as sp
-import os
-import itertools
-import sys
-import csv
-import argparse as ap
-
-#Runs strassenSeuil and returns the time it took to run the algorithm
-def runProgram(m1, m2, threshold):
-	print('Running ./strasseniSeuilCalcule -f', m1, m2, '-s', threshold) #KEVIN: run a commnand
-	return float(sp.check_output(['./strassenSeuilCalcule', '-f', str(m1), str(m2), '-s', str(threshold)]))
-	
-def average(l):
-	return sum(l) / len(l)
-
-def runBenchmark(baseThreshold, matSizes):
-	thresholds = [baseThreshold >> 2, baseThreshold, baseThreshold << 2, 1 << 30, 1]
-	
-	if not matSizes:
-		matSizes = [7, 8, 9, 10, 11]
-		
-	matNumber = 5
-	
-	print('Generating matrices...')
-	filenames = [['mat_' + str(size) + '_' + str(i) + '.txt' for i in range(0, matNumber)] for size in matSizes]
-	matrixNumber = 1;
-	for index, matGroup in enumerate(filenames):
-		for filename in matGroup:
-			print('Generating matrix', matrixNumber, '/', len(matSizes)*matNumber)
-			matrixNumber = matrixNumber+1
-			sp.call(['./Gen', str(matSizes[index]), filename])
-	print('Matrix generation done.')
-	
-	print('Running benchmark...')
-	
-	with open('results.csv', 'wb') as csvFile:
-		writer = csv.writer(csvFile, delimiter=',')
-		writer.writerow(['Seuil', 'Matrix size'])
-		writer.writerow([' '] + matSizes)
-		for threshold in thresholds:
-			row = [average([runProgram(combination[0], combination[1], threshold) for combination in itertools.combinations(matGroup, 2)]) for matGroup in filenames]
-			writer.writerow([threshold] + row)
-			print('Threshold =', threshold, ':', row)
-			
-	print('Benchmark done.')
-			
-	print("Removing generated matrices...")
-	os.system("rm mat_*")
-	
-def findThreshold():
-    #KEVIN: init vars
-	matSize = 11
-	bestThreshold = 0
-	bestTime = sys.float_info.max #KEVIN: init to highest float value
-	
-	#Generate a test matrix
-	sp.call(['./Gen', str(matSize), 'mat.txt'])
-	
-	print('Determining best threshold...')
-	sys.stdout.flush()
-	
-	for i in [(1 << n) for n in range(2, matSize+1)]:
-		time = runProgram('mat.txt', 'mat.txt', i);
-		print('Threshold =', i, ':', time, 'seconds')
-		sys.stdout.flush()
-		
-		if time < bestTime:
-			bestTime = time
-			bestThreshold = i
-			
-	print('########## Best threshold : ', bestThreshold, '##########')
-	
-	#Removing the test matrix
-	sp.call(['rm', 'mat.txt'])
-	
-	return bestThreshold
-	
-
-parser = ap.ArgumentParser(description='Trouver le seuil approprie pour l\'algorithme de Strassen ou lancer un benchmark des performances.')
-parser.add_argument('--threshold', type=int, help='Logarithme en base 2 du seuil de base a utiliser pour le benchmark', default=128)
-parser.add_argument('--findThreshold', action='store_true', help='Trouve le meilleur seuil')
-parser.add_argument('--benchmark', action='store_true', help='Lance un benchmark')
-parser.add_argument('--mSizes', nargs='*', type=int, help='Logarithmes en base 2 des tailles des matrices a tester dans le benchmark')
-
-args = parser.parse_args()
-
-if args.findThreshold:
-	threshold = findThreshold()
-else:
-	threshold = 2**args.threshold
-	
-if args.benchmark:
-	runBenchmark(threshold, args.mSizes);
+def extractMatrix(fileName):
+    newMatrix = []
     
-    
+    with open(fileName,'r') as f1:
+        for line in f1:
+            line = line.strip()
+            if len(line) > 1:
+               newMatrix.append([int(a) for a in line.split()])
+    return newMatrix
+
+def read(filename):
+    lines = open(filename, 'r').read().splitlines()
+    A = []
+    B = []
+    matrix = A
+    for line in lines:
+        if line != "":
+            matrix.append(map(int, line.split("\t")))
+        else:
+            matrix = B
+    return A, B
+
+def ikjMatrixProduct(A, B):
+    n = len(A)
+    C = [[0 for i in range(n)] for j in range(n)]
+    for i in range(n):
+        for k in range(n):
+            for j in range(n):
+                C[i][j] += A[i][k] * B[k][j]
+    return C
+
+def add(A, B):
+    n = len(A)
+    C = [[0 for j in range(0, n)] for i in range(0, n)]
+    for i in range(0, n):
+        for j in range(0, n):
+            C[i][j] = A[i][j] + B[i][j]
+    return C
+
+def subtract(A, B):
+    n = len(A)
+    C = [[0 for j in range(0, n)] for i in range(0, n)]
+    for i in range(0, n):
+        for j in range(0, n):
+            C[i][j] = A[i][j] - B[i][j]
+    return C
+
+def strassenR(A, B):
+    """ 
+        Implementation of the strassen algorithm.
+    """
+    n = len(A)
+
+    if n <= LEAF_SIZE:
+        return ikjMatrixProduct(A, B)
+    else:
+        # initializing the new sub-matrices
+        newSize = n/2
+        a11 = [[0 for j in range(0, newSize)] for i in range(0, newSize)]
+        a12 = [[0 for j in range(0, newSize)] for i in range(0, newSize)]
+        a21 = [[0 for j in range(0, newSize)] for i in range(0, newSize)]
+        a22 = [[0 for j in range(0, newSize)] for i in range(0, newSize)]
+
+        b11 = [[0 for j in range(0, newSize)] for i in range(0, newSize)]
+        b12 = [[0 for j in range(0, newSize)] for i in range(0, newSize)]
+        b21 = [[0 for j in range(0, newSize)] for i in range(0, newSize)]
+        b22 = [[0 for j in range(0, newSize)] for i in range(0, newSize)]
+
+        aResult = [[0 for j in range(0, newSize)] for i in range(0, newSize)]
+        bResult = [[0 for j in range(0, newSize)] for i in range(0, newSize)]
+
+        # dividing the matrices in 4 sub-matrices:
+        for i in range(0, newSize):
+            for j in range(0, newSize):
+                a11[i][j] = A[i][j]            # top left
+                a12[i][j] = A[i][j + newSize]    # top right
+                a21[i][j] = A[i + newSize][j]    # bottom left
+                a22[i][j] = A[i + newSize][j + newSize] # bottom right
+
+                b11[i][j] = B[i][j]            # top left
+                b12[i][j] = B[i][j + newSize]    # top right
+                b21[i][j] = B[i + newSize][j]    # bottom left
+                b22[i][j] = B[i + newSize][j + newSize] # bottom right
+
+        # Calculating p1 to p7:
+        aResult = add(a11, a22)
+        bResult = add(b11, b22)
+        p1 = strassenR(aResult, bResult) # p1 = (a11+a22) * (b11+b22)
+
+        aResult = add(a21, a22)      # a21 + a22
+        p2 = strassenR(aResult, b11)  # p2 = (a21+a22) * (b11)
+
+        bResult = subtract(b12, b22) # b12 - b22
+        p3 = strassenR(a11, bResult)  # p3 = (a11) * (b12 - b22)
+
+        bResult = subtract(b21, b11) # b21 - b11
+        p4 =strassenR(a22, bResult)   # p4 = (a22) * (b21 - b11)
+
+        aResult = add(a11, a12)      # a11 + a12
+        p5 = strassenR(aResult, b22)  # p5 = (a11+a12) * (b22)   
+
+        aResult = subtract(a21, a11) # a21 - a11
+        bResult = add(b11, b12)      # b11 + b12
+        p6 = strassenR(aResult, bResult) # p6 = (a21-a11) * (b11+b12)
+
+        aResult = subtract(a12, a22) # a12 - a22
+        bResult = add(b21, b22)      # b21 + b22
+        p7 = strassenR(aResult, bResult) # p7 = (a12-a22) * (b21+b22)
+
+        # calculating c21, c21, c11 e c22:
+        c12 = add(p3, p5) # c12 = p3 + p5
+        c21 = add(p2, p4)  # c21 = p2 + p4
+
+        aResult = add(p1, p4) # p1 + p4
+        bResult = add(aResult, p7) # p1 + p4 + p7
+        c11 = subtract(bResult, p5) # c11 = p1 + p4 - p5 + p7
+
+        aResult = add(p1, p3) # p1 + p3
+        bResult = add(aResult, p6) # p1 + p3 + p6
+        c22 = subtract(bResult, p2) # c22 = p1 + p3 - p2 + p6
+
+        # Grouping the results obtained in a single matrix:
+        C = [[0 for j in range(0, n)] for i in range(0, n)]
+        for i in range(0, newSize):
+            for j in range(0, newSize):
+                C[i][j] = c11[i][j]
+                C[i][j + newSize] = c12[i][j]
+                C[i + newSize][j] = c21[i][j]
+                C[i + newSize][j + newSize] = c22[i][j]
+        return C
+
+def strassen(A, B):
+    assert type(A) == list and type(B) == list
+    assert len(A) == len(A[0]) == len(B) == len(B[0])
+
+    # Make the matrices bigger so that you can apply the strassen
+    # algorithm recursively without having to deal with odd
+    # matrix sizes
+    nextPowerOfTwo = lambda n: 2**int(ceil(log(n,2)))
+    n = len(A)
+    m = nextPowerOfTwo(n)
+    APrep = [[0 for i in range(m)] for j in range(m)]
+    BPrep = [[0 for i in range(m)] for j in range(m)]
+    for i in range(n):
+        for j in range(n):
+            APrep[i][j] = A[i][j]
+            BPrep[i][j] = B[i][j]
+    CPrep = strassenR(APrep, BPrep)
+    C = [[0 for i in range(n)] for j in range(n)]
+    for i in range(n):
+        for j in range(n):
+            C[i][j] = CPrep[i][j]
+    return C
+
+if __name__ == "__main__":
+    parser = OptionParser()
+    parser.add_option("-i", dest="filename", default="2000.in",
+         help="input file with two matrices", metavar="FILE")
+    parser.add_option("-l", dest="LEAF_SIZE", default="8",
+         help="when do you start using ikj", metavar="LEAF_SIZE")
+    (options, args) = parser.parse_args()
+
+    LEAF_SIZE = options.LEAF_SIZE
+    A, B = read(options.filename)
+
+    C = strassen(A, B)
+    print(C)
+

@@ -7,7 +7,6 @@ Created on Sat Sep 29 17:29:27 2018
 
 import numpy as np
 import time
-import pandas as pd
 import csv
 
 aFile = open("ex1.1", 'r')
