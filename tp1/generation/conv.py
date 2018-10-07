@@ -23,8 +23,9 @@ def conv(matrixAName, matrixBName):
     
     start_time = time.time()
     
+    # matrix initialization
     w, h = len(matrixA[0]), len(matrixB[0]);
-    result = [[0 for x in range(w)] for y in range(h)] 
+    result = [[0 for x in range(w)] for y in range(h)]
     	
     for i in range(len(matrixA)):
        # iterate through columns of Y
