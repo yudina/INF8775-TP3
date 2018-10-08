@@ -23,27 +23,8 @@ def extractMatrix(fileName):
                newMatrix.append([int(a) for a in line.split()])
     return newMatrix
 
-def read(filename):
-    lines = open(filename, 'r').read().splitlines()
-    A = []
-    B = []
-    matrix = A
-    for line in lines:
-        if line != "":
-            matrix.append(map(int, line.split("\t")))
-        else:
-            matrix = B
-    return A, B
-
-def conventionnalProduct(matrixA, matrixB):
-#    n = len(A)
-#    C = [[0 for i in xrange(n)] for j in xrange(n)]
-#    for i in xrange(n):
-#        for k in xrange(n):
-#            for j in xrange(n):
-#                C[i][j] += A[i][k] * B[k][j]
-#    return C
-    
+# The simple algorithm used under the leaf_size value (recursion threshold)
+def conventionnalProduct(matrixA, matrixB):    
     
     # matrix initialization
     w, h = len(matrixA[0]), len(matrixB[0]);
@@ -57,133 +38,153 @@ def conventionnalProduct(matrixA, matrixB):
                matrixC[i][j] += matrixA[i][k] * matrixB[k][j]  
     return matrixC
 
+# Make an algebric addition of 2 same dimensions matrices
 def add(matrixA, matrixB):
-    n = len(matrixA)
-    matrixC = [[0 for j in range(0, n)] for i in range(0, n)]
     
-    for i in range(0, n):
-        for j in range(0, n):
+    # matrix initialization
+    length = len(matrixA)
+    matrixC = [[0 for j in range(0, length)] for i in range(0, length)]
+    
+    # addition on each element
+    for i in range(0, length):
+        for j in range(0, length):
             matrixC[i][j] = matrixA[i][j] + matrixB[i][j]
     return matrixC
 
-def subtract(A, B):
-    n = len(A)
-    C = [[0 for j in range(0, n)] for i in range(0, n)]
-    for i in range(0, n):
-        for j in range(0, n):
-            C[i][j] = A[i][j] - B[i][j]
-    return C
+# Make an algebric substraction of 2 same dimensions matrices
+def subtract(matrixA, matrixB):
+    
+    # matrix initialization
+    length = len(matrixA)
+    matrixC = [[0 for j in range(0, length)] for i in range(0, length)]
+    
+    # substraction on each element
+    for i in range(0, length):
+        for j in range(0, length):
+            matrixC[i][j] = matrixA[i][j] - matrixB[i][j]
+    return matrixC
 
-def strassen(A, B):
-    """ 
-        Implementation of the strassen algorithm.
-    """
-    n = len(A)
+# Strassen divide and conquer recursive algorithm 
+def strassen(matrixA, matrixB):
+    
+    currentLength = len(matrixA)
 
-    if n <= LEAF_SIZE:
-        return conventionnalProduct(A, B)
+    # Use a simpler algorithm the matrix height/width is under the recursion threshold
+    if currentLength <= LEAF_SIZE:
+        return conventionnalProduct(matrixA, matrixB)
     else:
-        # initializing the new sub-matrices
-        newSize = int(n/2)
-        a11 = [[0 for j in range(0, newSize)] for i in range(0, newSize)]
-        a12 = [[0 for j in range(0, newSize)] for i in range(0, newSize)]
-        a21 = [[0 for j in range(0, newSize)] for i in range(0, newSize)]
-        a22 = [[0 for j in range(0, newSize)] for i in range(0, newSize)]
+        # 1) initializing the 4 new sub-matrices with the 0 value
+        newLength = int(currentLength/2)
+        a11 = [[0 for j in range(0, newLength)] for i in range(0, newLength)]
+        a12 = [[0 for j in range(0, newLength)] for i in range(0, newLength)]
+        a21 = [[0 for j in range(0, newLength)] for i in range(0, newLength)]
+        a22 = [[0 for j in range(0, newLength)] for i in range(0, newLength)]
 
-        b11 = [[0 for j in range(0, newSize)] for i in range(0, newSize)]
-        b12 = [[0 for j in range(0, newSize)] for i in range(0, newSize)]
-        b21 = [[0 for j in range(0, newSize)] for i in range(0, newSize)]
-        b22 = [[0 for j in range(0, newSize)] for i in range(0, newSize)]
+        b11 = [[0 for j in range(0, newLength)] for i in range(0, newLength)]
+        b12 = [[0 for j in range(0, newLength)] for i in range(0, newLength)]
+        b21 = [[0 for j in range(0, newLength)] for i in range(0, newLength)]
+        b22 = [[0 for j in range(0, newLength)] for i in range(0, newLength)]
 
-        aResult = [[0 for j in range(0, newSize)] for i in range(0, newSize)]
-        bResult = [[0 for j in range(0, newSize)] for i in range(0, newSize)]
+        a_middle_result = [[0 for j in range(0, newLength)] for i in range(0, newLength)]
+        b_middle_result = [[0 for j in range(0, newLength)] for i in range(0, newLength)]
 
-        # dividing the matrices in 4 sub-matrices:
-        for i in range(0, newSize):
-            for j in range(0, newSize):
-                a11[i][j] = A[i][j]            # top left
-                a12[i][j] = A[i][j + newSize]    # top right
-                a21[i][j] = A[i + newSize][j]    # bottom left
-                a22[i][j] = A[i + newSize][j + newSize] # bottom right
+        # 2) dividing the original matrices in the 4 new sub-matrices:
+        for i in range(0, newLength):
+            for j in range(0, newLength):
+                a11[i][j] = matrixA[i][j]                     # top left
+                a12[i][j] = matrixA[i][j + newLength]           # top right
+                a21[i][j] = matrixA[i + newLength][j]           # bottom left
+                a22[i][j] = matrixA[i + newLength][j + newLength] # bottom right
 
-                b11[i][j] = B[i][j]            # top left
-                b12[i][j] = B[i][j + newSize]    # top right
-                b21[i][j] = B[i + newSize][j]    # bottom left
-                b22[i][j] = B[i + newSize][j + newSize] # bottom right
+                b11[i][j] = matrixB[i][j]                     # top left
+                b12[i][j] = matrixB[i][j + newLength]           # top right
+                b21[i][j] = matrixB[i + newLength][j]           # bottom left
+                b22[i][j] = matrixB[i + newLength][j + newLength] # bottom right
 
-        # Calculating p1 to p7:
-        aResult = add(a11, a22)
-        bResult = add(b11, b22)
-        p1 = strassen(aResult, bResult) # p1 = (a11+a22) * (b11+b22)
+        # 3) Calculation of p1 to p7 (according to the principles of the algorithm):
+        
+        a_middle_result = add(a11, a22)
+        b_middle_result = add(b11, b22)
+        p1 = strassen(a_middle_result, b_middle_result) # p1 = (a11+a22) * (b11+b22)
 
-        aResult = add(a21, a22)      # a21 + a22
-        p2 = strassen(aResult, b11)  # p2 = (a21+a22) * (b11)
+        a_middle_result = add(a21, a22)      # a21 + a22
+        p2 = strassen(a_middle_result, b11)  # p2 = (a21+a22) * (b11)
 
-        bResult = subtract(b12, b22) # b12 - b22
-        p3 = strassen(a11, bResult)  # p3 = (a11) * (b12 - b22)
+        b_middle_result = subtract(b12, b22) # b12 - b22
+        p3 = strassen(a11, b_middle_result)  # p3 = (a11) * (b12 - b22)
 
-        bResult = subtract(b21, b11) # b21 - b11
-        p4 =strassen(a22, bResult)   # p4 = (a22) * (b21 - b11)
+        b_middle_result = subtract(b21, b11) # b21 - b11
+        p4 =strassen(a22, b_middle_result)   # p4 = (a22) * (b21 - b11)
 
-        aResult = add(a11, a12)      # a11 + a12
-        p5 = strassen(aResult, b22)  # p5 = (a11+a12) * (b22)   
+        a_middle_result = add(a11, a12)      # a11 + a12
+        p5 = strassen(a_middle_result, b22)  # p5 = (a11+a12) * (b22)   
 
-        aResult = subtract(a21, a11) # a21 - a11
-        bResult = add(b11, b12)      # b11 + b12
-        p6 = strassen(aResult, bResult) # p6 = (a21-a11) * (b11+b12)
+        a_middle_result = subtract(a21, a11)    # a21 - a11
+        b_middle_result = add(b11, b12)         # b11 + b12
+        p6 = strassen(a_middle_result, b_middle_result) # p6 = (a21-a11) * (b11+b12)
 
-        aResult = subtract(a12, a22) # a12 - a22
-        bResult = add(b21, b22)      # b21 + b22
-        p7 = strassen(aResult, bResult) # p7 = (a12-a22) * (b21+b22)
+        a_middle_result = subtract(a12, a22)    # a12 - a22
+        b_middle_result = add(b21, b22)         # b21 + b22
+        p7 = strassen(a_middle_result, b_middle_result) # p7 = (a12-a22) * (b21+b22)
 
-        # calculating c21, c21, c11 e c22:
+        # 4) Calculation of c11, c12, c21 and of c22:
         c12 = add(p3, p5) # c12 = p3 + p5
         c21 = add(p2, p4)  # c21 = p2 + p4
 
-        aResult = add(p1, p4) # p1 + p4
-        bResult = add(aResult, p7) # p1 + p4 + p7
-        c11 = subtract(bResult, p5) # c11 = p1 + p4 - p5 + p7
+        a_middle_result = add(p1, p4) # p1 + p4
+        b_middle_result = add(a_middle_result, p7) # p1 + p4 + p7
+        c11 = subtract(b_middle_result, p5) # c11 = p1 + p4 - p5 + p7
 
-        aResult = add(p1, p3) # p1 + p3
-        bResult = add(aResult, p6) # p1 + p3 + p6
-        c22 = subtract(bResult, p2) # c22 = p1 + p3 - p2 + p6
+        a_middle_result = add(p1, p3) # p1 + p3
+        b_middle_result = add(a_middle_result, p6) # p1 + p3 + p6
+        c22 = subtract(b_middle_result, p2) # c22 = p1 + p3 - p2 + p6
 
-        # Grouping the results obtained in a single matrix:
-        C = [[0 for j in range(0, n)] for i in range(0, n)]
-        for i in range(0, newSize):
-            for j in range(0, newSize):
-                C[i][j] = c11[i][j]
-                C[i][j + newSize] = c12[i][j]
-                C[i + newSize][j] = c21[i][j]
-                C[i + newSize][j + newSize] = c22[i][j]
-        return C
+        # 5) Grouping of the c_(i,j) results in a single matrix:
+        matrixC = [[0 for j in range(0, currentLength)] for i in range(0, currentLength)]
+        for i in range(0, newLength):
+            for j in range(0, newLength):
+                matrixC[i][j] = c11[i][j]
+                matrixC[i][j + newLength] = c12[i][j]
+                matrixC[i + newLength][j] = c21[i][j]
+                matrixC[i + newLength][j + newLength] = c22[i][j]
+        return matrixC
 
 def runStrassen(filenameA, filenameB):
-    A = extractMatrix(filenameA)
-    B = extractMatrix(filenameB)
-    assert type(A) == list and type(B) == list
-    assert len(A) == len(A[0]) == len(B) == len(B[0])
+    
+    # Extract matrixA and matrixB from the files
+    matrixA = extractMatrix(filenameA)
+    matrixB = extractMatrix(filenameB)
+    
+    # Sizes and types must be equals to perform a multiplication
+    assert type(matrixA) == list and type(matrixB) == list
+    assert len(matrixA) == len(matrixA[0]) == len(matrixB) == len(matrixB[0])
 
-    # Make the matrices bigger so that you can apply the strassen
-    # algorithm recursively without having to deal with odd
-    # matrix sizes
+    # Make the matrix operation easier by creating even sized
+    # matrices. This is possible by making the matrices larger,
+    # using the next power of 2.
     nextPowerOfTwo = lambda n: 2**int(ceil(log(n,2)))
-    n = len(A)
-    m = nextPowerOfTwo(n)
-    APrep = [[0 for i in range(m)] for j in range(m)]
-    BPrep = [[0 for i in range(m)] for j in range(m)]
-    for i in range(n):
-        for j in range(n):
-            APrep[i][j] = A[i][j]
-            BPrep[i][j] = B[i][j]
+    currentLength = len(matrixA)
+    nextPowerLength = nextPowerOfTwo(currentLength)
+    
+    # Initialization of copies of old matrices for calculations
+    APrep = [[0 for i in range(nextPowerLength)] for j in range(nextPowerLength)]
+    BPrep = [[0 for i in range(nextPowerLength)] for j in range(nextPowerLength)]
+    for i in range(currentLength):
+        for j in range(currentLength):
+            APrep[i][j] = matrixA[i][j]
+            BPrep[i][j] = matrixB[i][j]
+            
+    # Run Strassen algorithm
     CPrep = strassen(APrep, BPrep)
-    C = [[0 for i in range(n)] for j in range(n)]
-    for i in range(n):
-        for j in range(n):
-            C[i][j] = CPrep[i][j]
+    
+    # Copy the result in a correctly sized matrix
+    matrixC = [[0 for i in range(currentLength)] for j in range(currentLength)]
+    for i in range(currentLength):
+        for j in range(currentLength):
+            matrixC[i][j] = CPrep[i][j]
     print("result value is :")
-    print(C)
-    return C
+    print(matrixC)
+    return matrixC
 
 if __name__ == "__main__":
     
@@ -191,7 +192,7 @@ if __name__ == "__main__":
     
     print("started strassen")
     main_start_time = time.time()
-    runStrassen("ex1.1","ex1.2")
+#    runStrassen("ex1.1","ex1.2")
 #    runStrassen("ex1.1","ex1.3")
 #    runStrassen("ex1.1","ex1.4")
 #    runStrassen("ex1.1","ex1.5")
@@ -202,7 +203,7 @@ if __name__ == "__main__":
 #    runStrassen("ex1.3","ex1.5")
 #    runStrassen("ex1.4","ex1.5")
 #    
-#    runStrassen("ex2.1","ex2.2")
+    runStrassen("ex2.1","ex2.2")
 #    runStrassen("ex2.1","ex2.3")
 #    runStrassen("ex2.1","ex2.4")
 #    runStrassen("ex2.1","ex2.5")
