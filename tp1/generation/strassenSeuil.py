@@ -6,16 +6,14 @@ Created on Sat Sep 29 17:29:27 2018
 """
 
 import sys
-from optparse import OptionParser
-from math import ceil, log
 import time
-import csv
+from math import ceil, log
 
 ex_path1 = sys.argv[1] # Path of the first matrix
 ex_path2 = sys.argv[2] # Path of the second matrix
 
-global times
-times = []
+global LEAF_SIZE
+LEAF_SIZE = 256 # Recursivity threshold is LEAF_SIZE*LEAF_SIZE
 
 def extractMatrix(fileName):
     newMatrix = []
@@ -178,24 +176,51 @@ def runStrassen(filenameA, filenameB):
             APrep[i][j] = matrixA[i][j]
             BPrep[i][j] = matrixB[i][j]
             
+    # Start time count
+    start_time = time.time()
+            
     # Run Strassen algorithm
     CPrep = strassen(APrep, BPrep)
+    
+    # End time count
+    global runtime
+    end_time = time.time()
+    runtime = end_time - start_time
     
     # Copy the result in a correctly sized matrix
     matrixC = [[0 for i in range(currentLength)] for j in range(currentLength)]
     for i in range(currentLength):
         for j in range(currentLength):
             matrixC[i][j] = CPrep[i][j]
-    print("result value is :")
-    print(matrixC)
     return matrixC
 
-if __name__ == "__main__":
+def printMatrix(matrix):
+    # Obtain the N
+    file = open(ex_path1, 'r')
+    N = int(file.readline())
+    file.close()
     
-    LEAF_SIZE = 1
-    
-    print("started strassen")
-    main_start_time = time.time()
+    # Output of the requested format
+    print(N)
+    for line in matrix:
+        print("\t".join(map(str,line)))
+# Run the strassen algorithm
+result = runStrassen(ex_path1, ex_path2)
+
+# Call options (interface du laboratoire)
+options = sys.argv[3:]
+if '-p' in options: # Print result
+    printMatrix(result)
+if '-t' in options: # Print execution time
+    print(runtime)
+
+#
+#if __name__ == "__main__":
+#    
+#    LEAF_SIZE = 5
+#    
+#    print("started strassen")
+#    main_start_time = time.time()
 #    runStrassen("ex1.1","ex1.2")
 #    runStrassen("ex1.1","ex1.3")
 #    runStrassen("ex1.1","ex1.4")
@@ -207,7 +232,7 @@ if __name__ == "__main__":
 #    runStrassen("ex1.3","ex1.5")
 #    runStrassen("ex1.4","ex1.5")
 #    
-    runStrassen("ex2.1","ex2.2")
+#    runStrassen("ex2.1","ex2.2")
 #    runStrassen("ex2.1","ex2.3")
 #    runStrassen("ex2.1","ex2.4")
 #    runStrassen("ex2.1","ex2.5")
@@ -251,20 +276,20 @@ if __name__ == "__main__":
 #    runStrassen("ex5.3","ex5.5")
 #    runStrassen("ex5.4","ex5.5")
     
-    main_runtime = time.time() - main_start_time
-    times.append(main_runtime)
-    
-    print(times)
-    print("main_runtime : ")
-    print(main_runtime)
-
-csvfile = "outStrassen.csv"
-
-#Assuming res is a flat list
-with open(csvfile, "w") as output:
-    writer = csv.writer(output, lineterminator='\n')
-    for t in times:
-        writer.writerow([t])  
+#    main_runtime = time.time() - main_start_time
+#    times.append(main_runtime)
+#    
+#    print(times)
+#    print("main_runtime : ")
+#    print(main_runtime)
+#
+#csvfile = "outStrassen.csv"
+#
+##Assuming res is a flat list
+#with open(csvfile, "w") as output:
+#    writer = csv.writer(output, lineterminator='\n')
+#    for t in times:
+#        writer.writerow([t])  
     
 #    parser = OptionParser()
 #    parser.add_option("-i", dest="filename", default="2000.in",
