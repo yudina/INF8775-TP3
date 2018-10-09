@@ -8,8 +8,8 @@ Created on Sat Sep 29 17:29:27 2018
 import sys
 import time
 
-ex_path1 = sys.argv[1] # Path of the first matrix
-ex_path2 = sys.argv[2] # Path of the second matrix
+ex_path1 = "../testset/ex_1.1"#sys.argv[1] # Path of the first matrix
+ex_path2 = "../testset/ex_1.1"#sys.argv[2] # Path of the second matrix
 
 def extractMatrix(fileName):
     newMatrix = []
@@ -51,6 +51,9 @@ def conv(ex_path1, ex_path2):
     global runtime
     end_time = time.time()
     runtime = end_time - start_time
+    
+    print(matrixC[0])
+    print(runtime)
     
     return matrixC
 

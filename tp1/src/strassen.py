@@ -193,6 +193,10 @@ def runStrassen(filenameA, filenameB):
     for i in range(currentLength):
         for j in range(currentLength):
             matrixC[i][j] = CPrep[i][j]
+            
+    print(matrixC[0])
+    print(runtime)
+            
     return matrixC
 
 def printMatrix(matrix):
