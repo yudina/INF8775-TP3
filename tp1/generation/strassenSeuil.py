@@ -1,14 +1,18 @@
 # -*- coding: utf-8 -*-
 """
-Created on Wed Oct  3 11:46:48 2018
+Created on Sat Sep 29 17:29:27 2018
 
-@author: kevin
+@authors: kevin, yujia
 """
 
+import sys
 from optparse import OptionParser
 from math import ceil, log
 import time
 import csv
+
+ex_path1 = sys.argv[1] # Path of the first matrix
+ex_path2 = sys.argv[2] # Path of the second matrix
 
 global times
 times = []
