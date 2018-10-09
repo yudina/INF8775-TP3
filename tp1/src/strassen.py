@@ -218,3 +218,4 @@ if '-p' in options: # Print result
     printMatrix(result)
 if '-t' in options: # Print execution time
     print(runtime)
+    
