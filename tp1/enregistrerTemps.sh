@@ -5,7 +5,7 @@
 
 for algo in {"conv","strassen","strassenSeuil"}; do
     for serie in $(ls "testset"); do
-	echo "EXECUTION 1" >> ./results/raw/${algo}_${serie}.csv
+	#echo "EXECUTION 1" >> ./results/raw/${algo}_${serie}.csv
 	counter=4
 	for ex1 in $(ls "testset/$serie"); do
 	    for ex2 in $(ls "testset/$serie" | tail -n $counter); do

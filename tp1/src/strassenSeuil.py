@@ -187,10 +187,6 @@ def runStrassen(filenameA, filenameB):
     end_time = time.time()
     runtime = end_time - start_time
     
-    print("end of run")
-    print(CPrep[0])
-    print(runtime)
-    
     # Copy the result in a correctly sized matrix
     matrixC = [[0 for i in range(currentLength)] for j in range(currentLength)]
     for i in range(currentLength):
@@ -208,6 +204,8 @@ def printMatrix(matrix):
     print(N)
     for line in matrix:
         print("\t".join(map(str,line)))
+        
+        
 # Run the strassen algorithm
 result = runStrassen(ex_path1, ex_path2)
 

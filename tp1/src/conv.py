@@ -53,9 +53,6 @@ def conv(ex_path1, ex_path2):
     end_time = time.time()
     runtime = end_time - start_time
     
-    print(matrixC[0])
-    print(runtime)
-    
     return matrixC
 
 def printMatrix(matrix):
