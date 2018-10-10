@@ -12,8 +12,8 @@ from math import ceil, log
 ex_path1 = sys.argv[1] # Path of the first matrix
 ex_path2 = sys.argv[2] # Path of the second matrix
 
-global LEAF_SIZE
-LEAF_SIZE = 256 # Recursivity threshold is LEAF_SIZE*LEAF_SIZE
+global LEAF_SIZE # Width or Height of the Recursion threshold matrix
+LEAF_SIZE = 256 # Recursion threshold is LEAF_SIZE*LEAF_SIZE
 
 def extractMatrix(fileName):
     newMatrix = []
@@ -69,39 +69,39 @@ def subtract(matrixA, matrixB):
 # Strassen divide and conquer recursive algorithm 
 def strassen(matrixA, matrixB):
     
-    currentLength = len(matrixA)
+    currentWidth = len(matrixA)
 
     # Use a simpler algorithm the matrix height/width is under the recursion threshold
-    if currentLength <= LEAF_SIZE:
+    if currentWidth <= LEAF_SIZE:
         return conventionnalProduct(matrixA, matrixB)
     else:
         # 1) initializing the 4 new sub-matrices with the 0 value
-        newLength = int(currentLength/2)
-        a11 = [[0 for j in range(0, newLength)] for i in range(0, newLength)]
-        a12 = [[0 for j in range(0, newLength)] for i in range(0, newLength)]
-        a21 = [[0 for j in range(0, newLength)] for i in range(0, newLength)]
-        a22 = [[0 for j in range(0, newLength)] for i in range(0, newLength)]
+        newWidth = int(currentWidth/2)
+        a11 = [[0 for j in range(0, newWidth)] for i in range(0, newWidth)]
+        a12 = [[0 for j in range(0, newWidth)] for i in range(0, newWidth)]
+        a21 = [[0 for j in range(0, newWidth)] for i in range(0, newWidth)]
+        a22 = [[0 for j in range(0, newWidth)] for i in range(0, newWidth)]
 
-        b11 = [[0 for j in range(0, newLength)] for i in range(0, newLength)]
-        b12 = [[0 for j in range(0, newLength)] for i in range(0, newLength)]
-        b21 = [[0 for j in range(0, newLength)] for i in range(0, newLength)]
-        b22 = [[0 for j in range(0, newLength)] for i in range(0, newLength)]
+        b11 = [[0 for j in range(0, newWidth)] for i in range(0, newWidth)]
+        b12 = [[0 for j in range(0, newWidth)] for i in range(0, newWidth)]
+        b21 = [[0 for j in range(0, newWidth)] for i in range(0, newWidth)]
+        b22 = [[0 for j in range(0, newWidth)] for i in range(0, newWidth)]
 
-        a_middle_result = [[0 for j in range(0, newLength)] for i in range(0, newLength)]
-        b_middle_result = [[0 for j in range(0, newLength)] for i in range(0, newLength)]
+        a_middle_result = [[0 for j in range(0, newWidth)] for i in range(0, newWidth)]
+        b_middle_result = [[0 for j in range(0, newWidth)] for i in range(0, newWidth)]
 
         # 2) dividing the original matrices in the 4 new sub-matrices:
-        for i in range(0, newLength):
-            for j in range(0, newLength):
+        for i in range(0, newWidth):
+            for j in range(0, newWidth):
                 a11[i][j] = matrixA[i][j]                     # top left
-                a12[i][j] = matrixA[i][j + newLength]           # top right
-                a21[i][j] = matrixA[i + newLength][j]           # bottom left
-                a22[i][j] = matrixA[i + newLength][j + newLength] # bottom right
+                a12[i][j] = matrixA[i][j + newWidth]           # top right
+                a21[i][j] = matrixA[i + newWidth][j]           # bottom left
+                a22[i][j] = matrixA[i + newWidth][j + newWidth] # bottom right
 
                 b11[i][j] = matrixB[i][j]                     # top left
-                b12[i][j] = matrixB[i][j + newLength]           # top right
-                b21[i][j] = matrixB[i + newLength][j]           # bottom left
-                b22[i][j] = matrixB[i + newLength][j + newLength] # bottom right
+                b12[i][j] = matrixB[i][j + newWidth]           # top right
+                b21[i][j] = matrixB[i + newWidth][j]           # bottom left
+                b22[i][j] = matrixB[i + newWidth][j + newWidth] # bottom right
 
         # 3) Calculation of p1 to p7 (according to the principles of the algorithm):
         
@@ -142,13 +142,13 @@ def strassen(matrixA, matrixB):
         c22 = subtract(b_middle_result, p2) # c22 = p1 + p3 - p2 + p6
 
         # 5) Grouping of the c_(i,j) results in a single matrix:
-        matrixC = [[0 for j in range(0, currentLength)] for i in range(0, currentLength)]
-        for i in range(0, newLength):
-            for j in range(0, newLength):
+        matrixC = [[0 for j in range(0, currentWidth)] for i in range(0, currentWidth)]
+        for i in range(0, newWidth):
+            for j in range(0, newWidth):
                 matrixC[i][j] = c11[i][j]
-                matrixC[i][j + newLength] = c12[i][j]
-                matrixC[i + newLength][j] = c21[i][j]
-                matrixC[i + newLength][j + newLength] = c22[i][j]
+                matrixC[i][j + newWidth] = c12[i][j]
+                matrixC[i + newWidth][j] = c21[i][j]
+                matrixC[i + newWidth][j + newWidth] = c22[i][j]
         return matrixC
 
 def runStrassen(filenameA, filenameB):
@@ -165,14 +165,14 @@ def runStrassen(filenameA, filenameB):
     # matrices. This is possible by making the matrices larger,
     # using the next power of 2.
     nextPowerOfTwo = lambda n: 2**int(ceil(log(n,2)))
-    currentLength = len(matrixA)
-    nextPowerLength = nextPowerOfTwo(currentLength)
+    currentWidth = len(matrixA)
+    nextPowerLength = nextPowerOfTwo(currentWidth)
     
     # Initialization of copies of old matrices for calculations
     APrep = [[0 for i in range(nextPowerLength)] for j in range(nextPowerLength)]
     BPrep = [[0 for i in range(nextPowerLength)] for j in range(nextPowerLength)]
-    for i in range(currentLength):
-        for j in range(currentLength):
+    for i in range(currentWidth):
+        for j in range(currentWidth):
             APrep[i][j] = matrixA[i][j]
             BPrep[i][j] = matrixB[i][j]
             
@@ -188,9 +188,9 @@ def runStrassen(filenameA, filenameB):
     runtime = end_time - start_time
     
     # Copy the result in a correctly sized matrix
-    matrixC = [[0 for i in range(currentLength)] for j in range(currentLength)]
-    for i in range(currentLength):
-        for j in range(currentLength):
+    matrixC = [[0 for i in range(currentWidth)] for j in range(currentWidth)]
+    for i in range(currentWidth):
+        for j in range(currentWidth):
             matrixC[i][j] = CPrep[i][j]
     return matrixC
 

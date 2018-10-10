@@ -8,7 +8,9 @@ Created on Sat Sep 29 17:29:27 2018
 import sys
 import time
 
-"../testset/serie1/ex_4.1"#
+# Path for product debugging
+#"../testset/serie1/ex_4.1"#
+
 ex_path1 = sys.argv[1] # Path of the first matrix
 ex_path2 = sys.argv[2] # Path of the second matrix
 
