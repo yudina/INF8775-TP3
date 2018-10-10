@@ -13,6 +13,7 @@ ex_path1 = sys.argv[1] # Path of the first matrix
 ex_path2 = sys.argv[2] # Path of the second matrix
 
 global LEAF_SIZE # Width or Height of the Recursion threshold matrix
+# 256 = 2^8
 LEAF_SIZE = 256 # Recursion threshold is LEAF_SIZE*LEAF_SIZE
 
 def extractMatrix(fileName):
