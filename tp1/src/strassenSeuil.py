@@ -12,9 +12,8 @@ from math import ceil, log
 ex_path1 = sys.argv[1] # Path of the first matrix
 ex_path2 = sys.argv[2] # Path of the second matrix
 
-global LEAF_SIZE # Width or Height of the Recursion threshold matrix
-# 256 = 2^8, threshold = 65536
-LEAF_SIZE = 256 # Recursion threshold is LEAF_SIZE*LEAF_SIZE
+global THRESHOLD # Recursion threshold "taille d'exemplaire"
+THRESHOLD = 256 # 256 = 2^8
 
 def extractMatrix(fileName):
     newMatrix = []
@@ -73,7 +72,7 @@ def strassen(matrixA, matrixB):
     currentWidth = len(matrixA)
 
     # Use a simpler algorithm the matrix height/width is under the recursion threshold
-    if currentWidth <= LEAF_SIZE:
+    if currentWidth <= THRESHOLD:
         return conventionnalProduct(matrixA, matrixB)
     else:
         # 1) initializing the 4 new sub-matrices with the 0 value
