@@ -1,0 +1,133 @@
+
+
+*******************************************************************************
+Wed Oct 10 22:56:39 2018
+
+
+FIT:    data read from "results/mean/conv.csv"
+        format = z
+        #datapoints = 6
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f(x)
+	f(x)=a*x**b
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a             b            
+   0 7.3253904219e+10  0.00e+00 9.77e+05  1.000000e+00  1.000000e+00
+   8 7.7266462308e+03  0.00e+00 9.77e-03 -1.789760e+00 -3.300671e+00
+
+After 8 iterations the fit converged.
+final sum of squares of residuals : 7726.65
+rel. change during last iteration : 0
+
+degrees of freedom    (FIT_NDF)                        : 4
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 43.9507
+variance of residuals (reduced chisquare) = WSSR/ndf   : 1931.66
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a               = -1.78976         +/- 8.951e+011   (5.001e+013%)
+b               = -3.30067         +/- 1.039e+011   (3.148e+012%)
+
+correlation matrix of the fit parameters:
+                a      b      
+a               1.000 
+b               1.000  1.000 
+
+
+*******************************************************************************
+Wed Oct 10 22:56:39 2018
+
+
+FIT:    data read from "results/mean/conv.xlsx"
+        format = z
+BREAK: bad data on line 1 of datafile
+
+*******************************************************************************
+Wed Oct 10 22:56:40 2018
+
+
+FIT:    data read from "results/mean/strassen.csv"
+        format = z
+        #datapoints = 6
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f(x)
+	f(x)=a*x**b
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a             b            
+   0 7.2791750092e+10  0.00e+00 9.77e+05  1.000000e+00  1.000000e+00
+1088 1.9300301102e+00 -2.93e-02 9.77e-03  6.658332e-05  1.318945e+00
+
+After 1088 iterations the fit converged.
+final sum of squares of residuals : 1.93003
+rel. change during last iteration : -2.93216e-007
+
+degrees of freedom    (FIT_NDF)                        : 4
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.694628
+variance of residuals (reduced chisquare) = WSSR/ndf   : 0.482508
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a               = 6.65833e-005     +/- 2.642e-006   (3.968%)
+b               = 1.31895          +/- 0.003163     (0.2398%)
+
+correlation matrix of the fit parameters:
+                a      b      
+a               1.000 
+b              -1.000  1.000 
+
+
+*******************************************************************************
+Wed Oct 10 22:56:41 2018
+
+
+FIT:    data read from "results/mean/strassen.xlsx"
+        format = z
+BREAK: bad data on line 1 of datafile
+
+*******************************************************************************
+Wed Oct 10 22:56:42 2018
+
+
+FIT:    data read from "results/mean/strassenSeuil.csv"
+        format = z
+        #datapoints = 6
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f(x)
+	f(x)=a*x**b
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a             b            
+   0 7.3278471551e+10  0.00e+00 9.77e+05  1.000000e+00  1.000000e+00
+ 502 9.7108413064e-03 -8.01e-01 9.77e-04  7.261704e-07  1.430736e+00
+
+After 502 iterations the fit converged.
+final sum of squares of residuals : 0.00971084
+rel. change during last iteration : -8.00876e-006
+
+degrees of freedom    (FIT_NDF)                        : 4
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.0492718
+variance of residuals (reduced chisquare) = WSSR/ndf   : 0.00242771
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a               = 7.2617e-007      +/- 5.483e-008   (7.55%)
+b               = 1.43074          +/- 0.00601      (0.42%)
+
+correlation matrix of the fit parameters:
+                a      b      
+a               1.000 
+b              -1.000  1.000 
+
+
+*******************************************************************************
+Wed Oct 10 22:56:42 2018
+
+
+FIT:    data read from "results/mean/strassSeuil.xlsx"
+        format = z
+BREAK: bad data on line 1 of datafile
