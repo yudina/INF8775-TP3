@@ -131,3 +131,92 @@ Wed Oct 10 22:56:42 2018
 FIT:    data read from "results/mean/strassSeuil.xlsx"
         format = z
 BREAK: bad data on line 1 of datafile
+
+*******************************************************************************
+Sat Oct 13 12:32:34 2018
+
+
+FIT:    data read from "results/tests/constantes/conv.csv"
+        format = z
+        #datapoints = 6
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f(x)
+	f(x)=a*x
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a            
+   0 1.8300317593e+16  0.00e+00 5.52e+07  1.000000e+00
+   5 2.0929466639e+01 -3.39e-11 5.52e+02  6.488987e-07
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 20.9295
+rel. change during last iteration : -3.39494e-016
+
+degrees of freedom    (FIT_NDF)                        : 5
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 2.04595
+variance of residuals (reduced chisquare) = WSSR/ndf   : 4.18589
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a               = 6.48899e-007     +/- 1.512e-008   (2.331%)
+
+
+*******************************************************************************
+Sat Oct 13 12:32:34 2018
+
+
+FIT:    data read from "results/tests/constantes/strassen.csv"
+        format = z
+        #datapoints = 6
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f(x)
+	f(x)=a*x
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a            
+   0 1.6622633831e+15  0.00e+00 1.66e+07  1.000000e+00
+   5 2.9898908978e+02  0.00e+00 1.66e+05  2.319371e-05
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 298.989
+rel. change during last iteration : 0
+
+degrees of freedom    (FIT_NDF)                        : 5
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 7.7329
+variance of residuals (reduced chisquare) = WSSR/ndf   : 59.7978
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a               = 2.31937e-005     +/- 1.897e-007   (0.8177%)
+
+
+*******************************************************************************
+Sat Oct 13 12:32:35 2018
+
+
+FIT:    data read from "results/tests/constantes/strassenSeuil.csv"
+        format = z
+        #datapoints = 6
+        residuals are weighted equally (unit weight)
+
+function used for fitting: f(x)
+	f(x)=a*x
+fitted parameters initialized with current variable values
+
+iter      chisq       delta/lim  lambda   a            
+   0 1.6623371127e+15  0.00e+00 1.66e+07  1.000000e+00
+   5 5.8970017766e-02 -1.09e-09 1.66e+02  1.017006e-06
+
+After 5 iterations the fit converged.
+final sum of squares of residuals : 0.05897
+rel. change during last iteration : -1.09431e-014
+
+degrees of freedom    (FIT_NDF)                        : 5
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 0.1086
+variance of residuals (reduced chisquare) = WSSR/ndf   : 0.011794
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a               = 1.01701e-006     +/- 2.664e-009   (0.2619%)
