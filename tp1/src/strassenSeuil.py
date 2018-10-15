@@ -26,54 +26,54 @@ def extractMatrix(fileName):
     return newMatrix
 
 # The simple algorithm used under the leaf_size value (recursion threshold)
-def conventionnalProduct(matrixA, matrixB):    
+def conventionnalProduct(matrix_A, matrix_B):    
     
     # matrix initialization
-    w, h = len(matrixA[0]), len(matrixB[0]);
-    matrixC = [[0 for x in range(w)] for y in range(h)]
+    w, h = len(matrix_A[0]), len(matrix_B[0]);
+    matrix_C = [[0 for x in range(w)] for y in range(h)]
     
-    for i in range(len(matrixA)):
+    for i in range(len(matrix_A)):
        # iterate through columns of Y
-       for j in range(len(matrixB[0])):
+       for j in range(len(matrix_B[0])):
            # iterate through rows of Y
-           for k in range(len(matrixB)):
-               matrixC[i][j] += matrixA[i][k] * matrixB[k][j]  
-    return matrixC
+           for k in range(len(matrix_B)):
+               matrix_C[i][j] += matrix_A[i][k] * matrix_B[k][j]  
+    return matrix_C
 
 # Make an algebric addition of 2 same dimensions matrices
-def add(matrixA, matrixB):
+def add(matrix_A, matrix_B):
     
     # matrix initialization
-    length = len(matrixA)
-    matrixC = [[0 for j in range(0, length)] for i in range(0, length)]
+    length = len(matrix_A)
+    matrix_C = [[0 for j in range(0, length)] for i in range(0, length)]
     
     # addition on each element
     for i in range(0, length):
         for j in range(0, length):
-            matrixC[i][j] = matrixA[i][j] + matrixB[i][j]
-    return matrixC
+            matrix_C[i][j] = matrix_A[i][j] + matrix_B[i][j]
+    return matrix_C
 
 # Make an algebric substraction of 2 same dimensions matrices
-def subtract(matrixA, matrixB):
+def subtract(matrix_A, matrix_B):
     
     # matrix initialization
-    length = len(matrixA)
-    matrixC = [[0 for j in range(0, length)] for i in range(0, length)]
+    length = len(matrix_A)
+    matrix_C = [[0 for j in range(0, length)] for i in range(0, length)]
     
     # substraction on each element
     for i in range(0, length):
         for j in range(0, length):
-            matrixC[i][j] = matrixA[i][j] - matrixB[i][j]
-    return matrixC
+            matrix_C[i][j] = matrix_A[i][j] - matrix_B[i][j]
+    return matrix_C
 
 # Strassen divide and conquer recursive algorithm 
-def strassen(matrixA, matrixB):
+def strassen(matrix_A, matrix_B):
     
-    currentWidth = len(matrixA)
+    currentWidth = len(matrix_A)
 
     # Use a simpler algorithm the matrix height/width is under the recursion threshold
     if currentWidth <= THRESHOLD:
-        return conventionnalProduct(matrixA, matrixB)
+        return conventionnalProduct(matrix_A, matrix_B)
     else:
         # 1) initializing the 4 new sub-matrices with the 0 value
         newWidth = int(currentWidth/2)
@@ -93,15 +93,15 @@ def strassen(matrixA, matrixB):
         # 2) dividing the original matrices in the 4 new sub-matrices:
         for i in range(0, newWidth):
             for j in range(0, newWidth):
-                a11[i][j] = matrixA[i][j]                     # top left
-                a12[i][j] = matrixA[i][j + newWidth]           # top right
-                a21[i][j] = matrixA[i + newWidth][j]           # bottom left
-                a22[i][j] = matrixA[i + newWidth][j + newWidth] # bottom right
+                a11[i][j] = matrix_A[i][j]                     # top left
+                a12[i][j] = matrix_A[i][j + newWidth]           # top right
+                a21[i][j] = matrix_A[i + newWidth][j]           # bottom left
+                a22[i][j] = matrix_A[i + newWidth][j + newWidth] # bottom right
 
-                b11[i][j] = matrixB[i][j]                     # top left
-                b12[i][j] = matrixB[i][j + newWidth]           # top right
-                b21[i][j] = matrixB[i + newWidth][j]           # bottom left
-                b22[i][j] = matrixB[i + newWidth][j + newWidth] # bottom right
+                b11[i][j] = matrix_B[i][j]                     # top left
+                b12[i][j] = matrix_B[i][j + newWidth]           # top right
+                b21[i][j] = matrix_B[i + newWidth][j]           # bottom left
+                b22[i][j] = matrix_B[i + newWidth][j + newWidth] # bottom right
 
         # 3) Calculation of p1 to p7 (according to the principles of the algorithm):
         
@@ -142,30 +142,30 @@ def strassen(matrixA, matrixB):
         c22 = subtract(b_middle_result, p2) # c22 = p1 + p3 - p2 + p6
 
         # 5) Grouping of the c_(i,j) results in a single matrix:
-        matrixC = [[0 for j in range(0, currentWidth)] for i in range(0, currentWidth)]
+        matrix_C = [[0 for j in range(0, currentWidth)] for i in range(0, currentWidth)]
         for i in range(0, newWidth):
             for j in range(0, newWidth):
-                matrixC[i][j] = c11[i][j]
-                matrixC[i][j + newWidth] = c12[i][j]
-                matrixC[i + newWidth][j] = c21[i][j]
-                matrixC[i + newWidth][j + newWidth] = c22[i][j]
-        return matrixC
+                matrix_C[i][j] = c11[i][j]
+                matrix_C[i][j + newWidth] = c12[i][j]
+                matrix_C[i + newWidth][j] = c21[i][j]
+                matrix_C[i + newWidth][j + newWidth] = c22[i][j]
+        return matrix_C
 
 def runStrassen(filenameA, filenameB):
     
-    # Extract matrixA and matrixB from the files
-    matrixA = extractMatrix(filenameA)
-    matrixB = extractMatrix(filenameB)
+    # Extract matrix_A and matrix_B from the files
+    matrix_A = extractMatrix(filenameA)
+    matrix_B = extractMatrix(filenameB)
     
     # Sizes and types must be equals to perform a multiplication
-    assert type(matrixA) == list and type(matrixB) == list
-    assert len(matrixA) == len(matrixA[0]) == len(matrixB) == len(matrixB[0])
+    assert type(matrix_A) == list and type(matrix_B) == list
+    assert len(matrix_A) == len(matrix_A[0]) == len(matrix_B) == len(matrix_B[0])
 
     # Make the matrix operation easier by creating even sized
     # matrices. This is possible by making the matrices larger,
     # using the next power of 2.
     nextPowerOfTwo = lambda n: 2**int(ceil(log(n,2)))
-    currentWidth = len(matrixA)
+    currentWidth = len(matrix_A)
     nextPowerLength = nextPowerOfTwo(currentWidth)
     
     # Initialization of copies of old matrices for calculations
@@ -173,8 +173,8 @@ def runStrassen(filenameA, filenameB):
     BPrep = [[0 for i in range(nextPowerLength)] for j in range(nextPowerLength)]
     for i in range(currentWidth):
         for j in range(currentWidth):
-            APrep[i][j] = matrixA[i][j]
-            BPrep[i][j] = matrixB[i][j]
+            APrep[i][j] = matrix_A[i][j]
+            BPrep[i][j] = matrix_B[i][j]
             
     # Start time count
     start_time = time.time()
@@ -188,11 +188,11 @@ def runStrassen(filenameA, filenameB):
     runtime = end_time - start_time
     
     # Copy the result in a correctly sized matrix
-    matrixC = [[0 for i in range(currentWidth)] for j in range(currentWidth)]
+    matrix_C = [[0 for i in range(currentWidth)] for j in range(currentWidth)]
     for i in range(currentWidth):
         for j in range(currentWidth):
-            matrixC[i][j] = CPrep[i][j]
-    return matrixC
+            matrix_C[i][j] = CPrep[i][j]
+    return matrix_C
 
 def printMatrix(matrix):
     # Obtain the N

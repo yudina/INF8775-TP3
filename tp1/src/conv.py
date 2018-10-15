@@ -14,48 +14,48 @@ import time
 ex_path1 = sys.argv[1] # Path of the first matrix
 ex_path2 = sys.argv[2] # Path of the second matrix
 
-def extractMatrix(fileName):
-    newMatrix = []
+def extractMatrix(flie_name):
+    new_matrix = []
     
-    with open(fileName,'r') as file:
+    with open(flie_name,'r') as file:
         for line in file:
             line = line.strip()
             if len(line) > 1:
-               newMatrix.append([int(a) for a in line.split()])
+               new_matrix.append([int(a) for a in line.split()])
     file.close()
     
-    return newMatrix
+    return new_matrix
 
 def conv(ex_path1, ex_path2):
-    matrixA = []
-    matrixB = []
-    matrixA = extractMatrix(ex_path1)
-    matrixB = extractMatrix(ex_path2)
+    matrix_A = []
+    matrix_B = []
+    matrix_A = extractMatrix(ex_path1)
+    matrix_B = extractMatrix(ex_path2)
     
     # Sizes and types must be equals to perform a multiplication
-    assert type(matrixA) == list and type(matrixB) == list
-    assert len(matrixA) == len(matrixA[0]) == len(matrixB) == len(matrixB[0])
+    assert type(matrix_A) == list and type(matrix_B) == list
+    assert len(matrix_A) == len(matrix_A[0]) == len(matrix_B) == len(matrix_B[0])
     
     # Start time count
     start_time = time.time()
     
     # matrix initialization
-    w, h = len(matrixA[0]), len(matrixB[0]);
-    matrixC = [[0 for x in range(w)] for y in range(h)]
+    w, h = len(matrix_A[0]), len(matrix_B[0]);
+    matrix_C = [[0 for x in range(w)] for y in range(h)]
     	
-    for i in range(len(matrixA)):
+    for i in range(len(matrix_A)):
        # iterate through columns of Y
-       for j in range(len(matrixB[0])):
+       for j in range(len(matrix_B[0])):
            # iterate through rows of Y
-           for k in range(len(matrixB)):
-               matrixC[i][j] += matrixA[i][k] * matrixB[k][j]  
+           for k in range(len(matrix_B)):
+               matrix_C[i][j] += matrix_A[i][k] * matrix_B[k][j]  
     
     # End time count
     global runtime
     end_time = time.time()
     runtime = end_time - start_time
     
-    return matrixC
+    return matrix_C
 
 def printMatrix(matrix):
     # Obtain the N
@@ -68,12 +68,12 @@ def printMatrix(matrix):
     for line in matrix:
         print("\t".join(map(str,line)))
 # Run the conventionnal algorithm
-matrixC = conv(ex_path1, ex_path2)
+matrix_C = conv(ex_path1, ex_path2)
 
 # Call options (interface du laboratoire)
 options = sys.argv[3:]
 if '-p' in options: # Print result
-    printMatrix(matrixC)
+    printMatrix(matrix_C)
 if '-t' in options: # Print execution time
     print(runtime)
     
