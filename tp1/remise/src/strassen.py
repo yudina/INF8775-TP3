@@ -3,6 +3,8 @@
 Created on Sat Sep 29 17:29:27 2018
 
 @authors: kevin, yujia
+
+Adapted from : https://martin-thoma.com/strassen-algorithm-in-python-java-cpp/
 """
 import sys
 import time
