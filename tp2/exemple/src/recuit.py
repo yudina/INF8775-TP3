@@ -3,24 +3,32 @@ import sys
 ex_path = "PR_100_400_1.txt"#sys.argv[1] # Path de l'exemplaire
 
 #Lecture du fichier
-text_file = open(ex_path, 'r')
+poids = []
+poidsMax = 0
+
+text_file = open(ex_path, "r")
 next(text_file)
 lines = text_file.read().split()
 text_file.close()
 
-#
 poids = lines[1::2]
-poidsMax = int(lines[-1])
+poidsMax = lines[-1]
+poids = sorted(poids, key=int, reverse=True) # Trie les bâtons en ordre décroissant
 
-for p in range(len(poids)):
-  poids[p] = int(poids[p])
+nbDyn = len(poids)
+
+# --------- Algorithme glouton ---------
+start = time.process_time()
+sum = 0
+for i in range (nbDyn):
+    if sum + int(poids[i]) < int(poidsMax):
+        sum += int(poids[i])
+end = time.process_time()
+# --------- Fin glouton ---------
 
 # La fonction retourne le poids total d’une solution
 def somme():
-    sum = 0
-    for i in range (nbDyn):
-    if sum + int(poids[i]) < int(poidsMax):
-        sum += int(poids[i])
+    
 
 def voisin(v):
     S = 9;
