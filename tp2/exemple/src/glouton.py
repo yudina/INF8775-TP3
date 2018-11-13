@@ -15,9 +15,7 @@ text_file.close()
 
 poids = lines[1::2]
 poidsMax = lines[-1]
-poids = sorted(poids, key=int, reverse=True) 
-#print(poids)
-#print(poidsMax)
+poids = sorted(poids, key=int, reverse=True) # Trie les bâtons en ordre décroissant
 
 nbDyn = len(poids)
 
