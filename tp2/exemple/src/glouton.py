@@ -4,7 +4,7 @@ import time
 ex_path = sys.argv[1] # Path de l'exemplaire
 
 # TODO: Algo ici
-start = time.process_time()
+
 poids = []
 poidsMax = 0
 
@@ -21,6 +21,7 @@ poids = sorted(poids, key=int, reverse=True)
 
 nbDyn = len(poids)
 
+start = time.process_time()
 sum = 0
 for i in range (nbDyn):
     if sum + int(poids[i]) < int(poidsMax):
