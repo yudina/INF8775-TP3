@@ -28,14 +28,16 @@ for i in range (nbDyn):
         solution.append(int(poids[i]))
 end = time.process_time()
 
-
-
 def imprimerSolution(s):
+    sortie = ""
     for i in range(len(s)):
-        print(s[i])
+        sortie += str(s[i]) + " "
+    print(sortie)
+
+imprimerSolution(solution)
 
 options = sys.argv[2:]
 if '-p' in options: # On imprime la solution
-    print(sommeBatons)
+    imprimerSolution(solution)
 if '-t' in options: # On imprime le temps d'exécution
     print(end - start, "seconds")
