@@ -34,10 +34,8 @@ def imprimerSolution(s):
         sortie += str(s[i]) + " "
     print(sortie)
 
-imprimerSolution(solution)
-
 options = sys.argv[2:]
 if '-p' in options: # On imprime la solution
     imprimerSolution(solution)
 if '-t' in options: # On imprime le temps d'exécution
-    print(end - start, "seconds")
+    print(end - start)
