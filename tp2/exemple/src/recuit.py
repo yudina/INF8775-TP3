@@ -1,9 +1,11 @@
 import sys
 import time
+import math
 from random import randrange
 
 ex_path = "PR_100_400_1.txt"#sys.argv[1] # Path de l'exemplaire
 
+# variables globales (pour remplacer les passages par référence)
 poids = []
 poidsMax = 0
 nBatons = 0
@@ -48,12 +50,13 @@ def somme(batons):
         
     return sommePoids
 
+# https://stackoverflow.com/questions/306400/how-to-randomly-select-an-item-from-a-list
 def choisirAleatoireBaton(batonsRestants):
     indexAleatoire = randrange(len(batonsRestants))
     print(batonsRestants[indexAleatoire])
     return indexAleatoire;
-}
 
+#https://stackoverflow.com/questions/627435/how-do-i-remove-an-element-from-a-list-by-index-in-python
 def voisin(poidsMax, batons, resultat):
     #    Une solution voisine est obtenue en choisissant uniformément
     #    au hasard un bâton parmi ceux qui ne sont pas encore choisis
@@ -73,8 +76,29 @@ def voisin(poidsMax, batons, resultat):
 #    HOW YOU DO THIS ? : c'est déjà fait par globales i gauss
 #    return #solution voisine de la solution en paramètre
 
-def recuit(S0, T, kmax, P, α):
-    S = glouton(solution)
+def recuit(poidsMax, batons, resultat):#(S0, T, kmax, P, α):
+    
+    # resultat c'est S0
+    theta = 100 # T
+	kmax = 5
+    P = 5
+    alpha = 0.8
+
+    solutionOptimale = resultat
+    
+    for i in range (kmax):
+        for j in range (P):
+            solutionAlternative = resultat
+            batonsAlternatives = batons
+            choisirVoisin(poidsMax, batonsAlternatives, solutionAlternative)
+            delta = somme(solutionAlternative) - somme(resultat)
+            if (0 <= delta || (rand() / double(RAND_MAX)) <= exp(delta/theta))
+                batons = batonsAlternatives
+                resultat = solutionAlternative
+                if (somme(solutionOptimale) <= somme(solutionAlternative)):
+                    soltuionOptimale = resultat
+        theta = theta * alpha
+
 #1 : La solution courante S est égale à une certaine solution initiale 
 #       valide S0 (par exemple la solution de votre algorithme glouton).
 #2 : On garde en mémoire la meilleure solution trouvée jusqu’à présent.
