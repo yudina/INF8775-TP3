@@ -1,6 +1,7 @@
 import sys
 import time
 import math
+import random
 from random import randrange
 
 ex_path = "PR_100_400_1.txt"#sys.argv[1] # Path de l'exemplaire
@@ -9,10 +10,11 @@ ex_path = "PR_100_400_1.txt"#sys.argv[1] # Path de l'exemplaire
 poids = []
 poidsMax = 0
 nBatons = 0
-start = 0
-end = 0
+debut = 0
+fin = 0
+temps = 0
 
-def etraireListeBaton():
+def extraireListeBaton():
     text_file = open(ex_path, "r")
     next(text_file)
     lines = text_file.read().split()
@@ -29,31 +31,26 @@ def etraireListeBaton():
 
 def glouton():
     global nBatons
-    global start
-    global end
-    start = time.process_time()
     sommeBatons = 0
     solution = []
     for i in range (nBatons):
         if sommeBatons + int(poids[i]) < int(poidsMax):
             sommeBatons += int(poids[i])
             solution.append(int(poids[i]))
-    end = time.process_time()
     return solution
  
 # La fonction retourne le poids total d’une liste de baton
 def somme(batons):
     sommePoids = 0
     
-    for i in range (batons):
-        sommePoids += batons[i]
+    for i in range (len(batons)):
+        sommePoids += int(batons[i])
         
     return sommePoids
 
 # https://stackoverflow.com/questions/306400/how-to-randomly-select-an-item-from-a-list
 def choisirAleatoireBaton(batonsRestants):
     indexAleatoire = randrange(len(batonsRestants))
-    print(batonsRestants[indexAleatoire])
     return indexAleatoire;
 
 #https://stackoverflow.com/questions/627435/how-do-i-remove-an-element-from-a-list-by-index-in-python
@@ -68,9 +65,9 @@ def voisin(poidsMax, batons, resultat):
     #    Il est possible que cela rende le poids total supérieur à P :
     #    on retirera alors des bâtons un à un (choisis uniformément au
     #    hasard) jusqu’à ce que le poids total ne dépasse pas P
-    while poidsMax < somme(resultat):
+    while int(poidsMax) < somme(resultat):
         resultatRetire = choisirAleatoireBaton(resultat)
-        batons.append(resultat[nouveauBaton])
+        batons.append(resultat[resultatRetire])
         del resultat[resultatRetire]
 
 #    HOW YOU DO THIS ? : c'est déjà fait par globales i gauss
@@ -90,45 +87,16 @@ def recuit(poidsMax, batons, resultat):#(S0, T, kmax, P, α):
         for j in range (P):
             solutionAlternative = resultat
             batonsAlternatives = batons
-            choisirVoisin(poidsMax, batonsAlternatives, solutionAlternative)
+            voisin(poidsMax, batonsAlternatives, solutionAlternative)
             delta = somme(solutionAlternative) - somme(resultat)
-            exposant = delta/theta
-            if (0 <= delta || ( (rand() / double(len(batons))) <= (exp(exposant)) ))
+            exposant = math.exp(delta/theta)
+            if (0 <= delta or random.uniform(0, 1) <= exposant ):
                 batons = batonsAlternatives
                 resultat = solutionAlternative
                 if (somme(solutionOptimale) <= somme(solutionAlternative)):
-                    soltuionOptimale = resultat
+                    solutionOptimale = resultat
         theta = theta * alpha
-
-#1 : La solution courante S est égale à une certaine solution initiale 
-#       valide S0 (par exemple la solution de votre algorithme glouton).
-#2 : On garde en mémoire la meilleure solution trouvée jusqu’à présent.
-#3 : La température courante θk  est égale à la température initiale T.
-#4 et 5: Pour chacune des kmax itérations et pour chacun des P paliers de température.
-#6 : On génère une nouvelle solution S’ (voisine de la solution S).
-#7 à 9 : Si la nouvelle solution est meilleure que la solution courante ou si la
-#       condition de probabilité est rencontrée, on met à jour la solution courante.
-#10 et 11 : On met à jour la meilleure solution si nécessaire.
-#15 : On met à jour la température.
-#16 : En terminannt l’algorithme retourne la meilleure solution qu’il a pu trouver.
-
-#1	S ← S0
-#2	Smeilleur ← S
-#3	θ1 ← T
-#4	for k = 1 ... kmax do
-#5		for j = 1 ... P do
-#6			S’ ← voisin(S)
-#7			Δ ← somme(S’) - somme(S)
-#8			if Δ ≥ 0 or eΔ/θk ≥ unif([0,1]) then
-#9				S ← S’
-#10				if somme(S) > somme(Smeilleur) then
-#11					Smeilleur ← S
-#12				end if
-#13			end if
-#14		end for
-#15		θk+1 ← θk × α
-#16	end for
-#17	retourner Smeilleur
+        return solutionOptimale
 
 def imprimerSolution(s):
     sortie = ""
@@ -136,8 +104,17 @@ def imprimerSolution(s):
         sortie += str(s[i]) + " "
     print(sortie)
 
+extraireListeBaton()
+debut = time.process_time()
+resultat = glouton()
+solutionOptimale = recuit(poidsMax, poids, resultat)
+fin = time.process_time()
+temps = fin - debut
+imprimerSolution(solutionOptimale)
+print(temps)
+
 options = sys.argv[2:]
 if '-p' in options: # On imprime la solution
-    print("84 73 12 44 98 75") # Données bidon, mais output du bon format demandé
+    imprimerSolution(solutionOptimale) # Données bidon, mais output du bon format demandé
 if '-t' in options: # On imprime le temps d'exécution
-    print("4.1347628746") # Données bidon, mais output du bon format demandé
+    print(temps) # Données bidon, mais output du bon format demandé
