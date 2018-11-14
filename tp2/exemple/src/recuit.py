@@ -1,9 +1,9 @@
 import sys
 import time
+from random import randrange
 
 ex_path = "PR_100_400_1.txt"#sys.argv[1] # Path de l'exemplaire
 
-#Lecture du fichier
 poids = []
 poidsMax = 0
 nBatons = 0
@@ -38,25 +38,40 @@ def glouton():
             solution.append(int(poids[i]))
     end = time.process_time()
     return solution
-
-print(end)
-
-# La fonction retourne le poids total d’une solution
-def somme():
-    S = 0
-
-def voisin(v):
-    S = 9
-#    Une solution voisine est obtenue en choisissant uniformément
-#    au hasard un bâton parmi ceux qui ne sont pas encore choisis
-#    et en l’ajoutant à la solution
+ 
+# La fonction retourne le poids total d’une liste de baton
+def somme(batons):
+    sommePoids = 0
     
-#    Il est possible que cela rende le poids total supérieur à P :
-#    on retirera alors des bâtons un à un (choisis uniformément au
-#    hasard) jusqu’à ce que le poids total ne dépasse pas P
-    
-    return #solution voisine de la solution en paramètre
+    for i in range (batons):
+        sommePoids += batons[i]
+        
+    return sommePoids
 
+def choisirAleatoireBaton(batonsRestants):
+    indexAleatoire = randrange(len(batonsRestants))
+    print(batonsRestants[indexAleatoire])
+    return indexAleatoire;
+}
+
+def voisin(poidsMax, batons, resultat):
+    #    Une solution voisine est obtenue en choisissant uniformément
+    #    au hasard un bâton parmi ceux qui ne sont pas encore choisis
+    #    et en l’ajoutant à la solution
+    nouveauBaton = choisirAleatoireBaton(batons)
+    resultat.append(batons[nouveauBaton])
+    del batons[nouveauBaton]
+    
+    #    Il est possible que cela rende le poids total supérieur à P :
+    #    on retirera alors des bâtons un à un (choisis uniformément au
+    #    hasard) jusqu’à ce que le poids total ne dépasse pas P
+    while poidsMax < somme(resultat):
+        resultatRetire = choisirAleatoireBaton(resultat)
+        batons.append(resultat[nouveauBaton])
+        del resultat[resultatRetire]
+
+#    HOW YOU DO THIS ? : c'est déjà fait par globales i gauss
+#    return #solution voisine de la solution en paramètre
 
 def recuit(S0, T, kmax, P, α):
     S = glouton(solution)
