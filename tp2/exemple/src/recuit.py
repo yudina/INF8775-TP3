@@ -1,39 +1,52 @@
 import sys
+import time
 
 ex_path = "PR_100_400_1.txt"#sys.argv[1] # Path de l'exemplaire
 
 #Lecture du fichier
 poids = []
 poidsMax = 0
+nBatons = 0
+start = 0
+end = 0
 
-text_file = open(ex_path, "r")
-next(text_file)
-lines = text_file.read().split()
-text_file.close()
+def etraireListeBaton():
+    text_file = open(ex_path, "r")
+    next(text_file)
+    lines = text_file.read().split()
+    text_file.close()
+    
+    global poids
+    global poidsMax
+    global nBatons
+    poids = lines[1::2]
+    poidsMax = lines[-1]
+    poids = sorted(poids, key=int, reverse=True) # Trie les bâtons en ordre décroissant
+    
+    nBatons = len(poids)
 
-poids = lines[1::2]
-poidsMax = lines[-1]
-poids = sorted(poids, key=int, reverse=True) # Trie les bâtons en ordre décroissant
+def glouton():
+    global nBatons
+    global start
+    global end
+    start = time.process_time()
+    sommeBatons = 0
+    solution = []
+    for i in range (nBatons):
+        if sommeBatons + int(poids[i]) < int(poidsMax):
+            sommeBatons += int(poids[i])
+            solution.append(int(poids[i]))
+    end = time.process_time()
+    return solution
 
-nbDyn = len(poids)
-
-# --------- Algorithme glouton ---------
-start = time.process_time()
-sommeBatons = 0
-solution = []
-for i in range (nbDyn):
-    if sommeBatons + int(poids[i]) < int(poidsMax):
-        sommeBatons += int(poids[i])
-        solution.append(int(poids[i]))
-end = time.process_time()
-# --------- Fin glouton ---------
+print(end)
 
 # La fonction retourne le poids total d’une solution
 def somme():
-    
+    S = 0
 
 def voisin(v):
-    S = 9;
+    S = 9
 #    Une solution voisine est obtenue en choisissant uniformément
 #    au hasard un bâton parmi ceux qui ne sont pas encore choisis
 #    et en l’ajoutant à la solution
@@ -45,8 +58,8 @@ def voisin(v):
     return #solution voisine de la solution en paramètre
 
 
-#def recuit(S0, T, kmax, P, α):
-    S = S0;
+def recuit(S0, T, kmax, P, α):
+    S = glouton(solution)
 #1 : La solution courante S est égale à une certaine solution initiale 
 #       valide S0 (par exemple la solution de votre algorithme glouton).
 #2 : On garde en mémoire la meilleure solution trouvée jusqu’à présent.
