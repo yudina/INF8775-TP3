@@ -19,10 +19,12 @@ nbDyn = len(poids)
 
 # --------- Algorithme glouton ---------
 start = time.process_time()
-sum = 0
+sommeBatons = 0
+solution = []
 for i in range (nbDyn):
-    if sum + int(poids[i]) < int(poidsMax):
-        sum += int(poids[i])
+    if sommeBatons + int(poids[i]) < int(poidsMax):
+        sommeBatons += int(poids[i])
+        solution.append(int(poids[i]))
 end = time.process_time()
 # --------- Fin glouton ---------
 
@@ -75,6 +77,11 @@ def voisin(v):
 #16	end for
 #17	retourner Smeilleur
 
+def imprimerSolution(s):
+    sortie = ""
+    for i in range(len(s)):
+        sortie += str(s[i]) + " "
+    print(sortie)
 
 options = sys.argv[2:]
 if '-p' in options: # On imprime la solution

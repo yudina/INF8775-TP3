@@ -1,7 +1,7 @@
 import sys
 import time
 
-ex_path = "PR_100_400_1.txt" #sys.argv[1] # Path de l'exemplaire
+ex_path = sys.argv[1] # Path de l'exemplaire
 
 # TODO: Algo ici
 
