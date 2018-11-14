@@ -80,7 +80,7 @@ def recuit(poidsMax, batons, resultat):#(S0, T, kmax, P, α):
     
     # resultat c'est S0
     theta = 100 # T
-	kmax = 5
+    kmax = 5
     P = 5
     alpha = 0.8
 
@@ -92,7 +92,8 @@ def recuit(poidsMax, batons, resultat):#(S0, T, kmax, P, α):
             batonsAlternatives = batons
             choisirVoisin(poidsMax, batonsAlternatives, solutionAlternative)
             delta = somme(solutionAlternative) - somme(resultat)
-            if (0 <= delta || (rand() / double(RAND_MAX)) <= exp(delta/theta))
+            exposant = delta/theta
+            if (0 <= delta || ( (rand() / double(len(batons))) <= (exp(exposant)) ))
                 batons = batonsAlternatives
                 resultat = solutionAlternative
                 if (somme(solutionOptimale) <= somme(solutionAlternative)):
