@@ -1,9 +1,7 @@
 import sys
 import time
 
-ex_path = sys.argv[1] # Path de l'exemplaire
-
-# TODO: Algo ici
+ex_path = "PR_100_400_1.txt"#sys.argv[1] # Path de l'exemplaire
 
 poids = []
 poidsMax = 0
@@ -14,8 +12,10 @@ lines = text_file.read().split()
 text_file.close()
 
 poids = lines[1::2]
-poidsMax = lines[-1]
+poidsMax = int(lines[-1])
 poids = sorted(poids, key=int, reverse=True) # Trie les bâtons en ordre décroissant
+
+poids = [ int(x) for x in poids ]
 
 nbDyn = len(poids)
 
@@ -23,16 +23,21 @@ start = time.process_time()
 sommeBatons = 0
 solution = []
 for i in range (nbDyn):
-    if sommeBatons + int(poids[i]) < int(poidsMax):
-        sommeBatons += int(poids[i])
-        solution.append(int(poids[i]))
+    if sommeBatons + poids[i] < poidsMax:
+        sommeBatons += poids[i]
+        solution.append(poids[i])
+        del poids[i]
+    else:
+        break
 end = time.process_time()
 
-def imprimerSolution(s):
+def imprimerSolution(solution):
     sortie = ""
-    for i in range(len(s)):
-        sortie += str(s[i]) + " "
+    for i in range(len(solution)):
+        sortie += str(solution[i]) + " "
     print(sortie)
+
+imprimerSolution(solution)
 
 options = sys.argv[2:]
 if '-p' in options: # On imprime la solution
