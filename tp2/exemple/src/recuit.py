@@ -82,9 +82,9 @@ def recuit(poids, S0):#(S0, T, kmax, P, α):
     global SPrime
     
     theta = 100 # T
-    kmax = 5
-    P = 5
-    alpha = 0.8
+    kmax = 6
+    P = 6
+    alpha = 0.81
     
     solutionRecuit = S0
     
@@ -122,11 +122,17 @@ solutionRecuit = recuit(poids, S0)
 fin = time.time()
 temps = fin - debut
 
-print(solutionRecuit)
-print(temps)
+def runSolution(solution):
+    sommeBatons = 0
+    for i in range(len(solution)):
+        sommeBatons += solution[i]
+    output = str(temps) + ";" + str(sommeBatons)
+    print(output)
 
 options = sys.argv[2:]
 if '-p' in options: # On imprime la solution
     imprimerSolution(solutionRecuit)
+if '-r' in options: # On imprime la solution et le temps
+    runSolution(solutionRecuit)
 if '-t' in options: # On imprime le temps d'exécution
     print(temps)
