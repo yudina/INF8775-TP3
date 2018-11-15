@@ -43,6 +43,6 @@ def calculPoids(poids, poidsMax):
 result, time = calculPoids(poids, poidsMax)
 options = sys.argv[2:]
 if '-p' in options: # On imprime la solution
-  print("calcul: ", result) 
+  print(result) 
 if '-t' in options: # On imprime le temps d'exécution
-  print(time, "seconds")
+  print(time)
