@@ -4,7 +4,7 @@ import math
 import random
 from random import randrange
 
-ex_path = "PR_100_400_1.txt"#sys.argv[1] # Path de l'exemplaire
+ex_path = sys.argv[1] # Path de l'exemplaire
 
 # variables globales (pour remplacer les passages par référence)
 poids = []
@@ -93,11 +93,7 @@ def recuit(poids, S0):#(S0, T, kmax, P, α):
             SPrime = S0
             poidsPrime = poids
             
-            print("avant")
-            print(len(poidsPrime))
             voisin()# les arguments par réf. sont théoriquement poidsPrime, SPrime
-            print("apres")
-            print(len(poidsPrime))
             
             delta = somme(SPrime) - somme(S0)
             exposant = math.exp(delta/theta)
@@ -111,12 +107,9 @@ def recuit(poids, S0):#(S0, T, kmax, P, α):
 
 def imprimerSolution(s):
     sortie = ""
-    sommeBatons = 0
     for i in range(len(s)):
-        sommeBatons += s[i]
         sortie += str(s[i]) + " "
     print(sortie)
-    print(sommeBatons)
 
 # Le "main"
 extraireListeBatons()
@@ -126,9 +119,6 @@ S0 = glouton()
 solutionRecuit = recuit(poids, S0)
 fin = time.process_time()
 temps = fin - debut
-
-imprimerSolution(solutionRecuit)
-print(temps)
 
 options = sys.argv[2:]
 if '-p' in options: # On imprime la solution
