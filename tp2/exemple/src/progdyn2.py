@@ -2,7 +2,6 @@ import sys
 import time
 
 ex_path = sys.argv[1] # Path de l'exemplaire
-# TODO: Algo ici
 
 text_file = open(ex_path, 'r')
 next(text_file)
@@ -59,15 +58,33 @@ def calculPoids(poids, poidsMax):
           break
       pM.append(maximum)
   end = time.process_time()
+  
+  #retourner result sous forme de list/array
   result = []
   for p in pM[-1]:
     for i in range(pM[-1][p]):
       result.append(p)
   return result, end - start
 
+def imprimerSolution(solution):
+    sortie = ""
+    for i in range(len(solution)):
+        sortie += str(solution[i]) + " "
+    print(sortie)
+
+def runSolution(solution):
+    sommeBatons = 0
+    for i in range(len(solution)):
+        sommeBatons += solution[i]
+    output = str(time) + ";" + str(sommeBatons)
+    print(output)
+
 result, time = calculPoids(poids, poidsMax)
+
 options = sys.argv[2:]
 if '-p' in options: # On imprime la solution
-  print(result) 
+  imprimerSolution(result)
+ if '-r' in options: # On imprime la solution et le temps
+  runSolution(result)
 if '-t' in options: # On imprime le temps d'exécution
   print(time)
