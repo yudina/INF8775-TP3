@@ -14,10 +14,11 @@ lines = text_file.read().split()
 text_file.close()
 
 # extraire batons
-start = time.time()
+
 poids = lines[1::2]
 poidsMax = int(lines[-1])
 
+start = time.time()
 poids = sorted(poids, key=int, reverse=True) # Trie les bâtons en ordre décroissant
 poids = [ int(x) for x in poids ]
 nbDyn = len(poids)
@@ -33,13 +34,9 @@ end = time.time()
 
 sommeBatons = 0
 time = end - start
-print(start)
-print(end)
-print(Decimal(time))
+
 for i in range(len(solution)):
     sommeBatons += solution[i]
-output = str(sommeBatons) + ";" + str(end - start)
-print(output)
 
 def imprimerSolution(solution):
     sortie = ""
@@ -49,14 +46,10 @@ def imprimerSolution(solution):
     
 def runSolution(solution):
     sommeBatons = 0
-    time = end - start
-    print(start)
-    print(end)
-    print(time)
     for i in range(len(solution)):
         sommeBatons += solution[i]
-    output = str(sommeBatons) + ";" + str(end - start)
-    #print(output)
+    output = str(sommeBatons) + ";" + str(time)
+    print(output)
 
 options = sys.argv[2:]
 if '-p' in options: # On imprime la solution
