@@ -1,21 +1,42 @@
 import sys
+import time
 
-ex_path = sys.argv[1] # Path de l'exemplaire
+ex_path = "PR_100_400_1.txt"#sys.argv[1] # Path de l'exemplaire
 
-def glouton(poids, poidsMax):
+poids = []
+poidsMax = 0
     
-    # index = [0, 1, 2, ..., n - 1] for n items
-    index = list(range(len(value)))
-    # contains ratios of values to weight
-    ratio = [v/w for v, w in zip(value, weight)]
-    # index is sorted according to value-to-weight ratio in decreasing order
-    index.sort(key=lambda i: ratio[i], reverse=True)
-    
-    
-    
+# lire exemplaire
+text_file = open(ex_path, "r")
+next(text_file)
+lines = text_file.read().split()
+text_file.close()
+
+# extraire batons
+poids = lines[1::2]
+poidsMax = int(lines[-1])
+poids = sorted(poids, key=int, reverse=True) # Trie les bâtons en ordre décroissant
+poids = [ int(x) for x in poids ]
+nbDyn = len(poids)
+
+# algo de glouton
+start = time.process_time()
+sommeBatons = 0
+solution = []
+for i in range (nbDyn):
+    if sommeBatons + poids[i] < poidsMax:
+        sommeBatons += poids[i]
+        solution.append(poids[i])
+end = time.process_time()
+
+def imprimerSolution(solution):
+    sortie = ""
+    for i in range(len(solution)):
+        sortie += str(solution[i]) + " "
+    print(sortie)
 
 options = sys.argv[2:]
 if '-p' in options: # On imprime la solution
-    print("84 73 12 44 98 75") # Données bidon, mais output du bon format demandé
+    imprimerSolution(solution)
 if '-t' in options: # On imprime le temps d'exécution
-    print("4.1347628746") # Données bidon, mais output du bon format demandé
+    print(end - start)
