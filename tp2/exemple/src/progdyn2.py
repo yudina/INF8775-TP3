@@ -2,7 +2,6 @@ import sys
 import time
 
 ex_path = sys.argv[1] # Path de l'exemplaire
-n = int(sys.argv[2])
 # TODO: Algo ici
 
 text_file = open(ex_path, 'r')
@@ -18,36 +17,53 @@ for p in range(len(poids)):
 
 print("expected: ", poidsMax)
 
-def matricePoids(n, poidsMax):
-	m = [[0 for _ in range(poidsMax)] for _ in range(n)]
-	return m
+def dictionairePoids(poids):
+  d = {}
+  for p in poids:
+    if p in d:
+      d[p] = d[p]+1
+    else:
+      d[p] = 1
+  return d
 
-def calculPoids(nbBatons, poids, poidsMax):
-  #n = calculBatons(poids, poidsMax)
+def somme(dictionaire):
+  somme = 0
+  for p in dictionaire:
+    somme = somme + p*dictionaire[p]
+  return somme
+
+def calculPoids(poids, poidsMax):
   start = time.process_time()
-  m = matricePoids(nbBatons, poidsMax)
-  for i in range(nbBatons):
-    for j in range(poidsMax):
-      if i == 0:
-        if j+1 in poids:
-          m[i][j] = j+1
-        elif j != 0:
-          m[i][j] = m[i][j-1]
-        else:
-          m[i][j] = 0
-      else:
-        maximum = 0
-        for k in range(j):
-          for p in poids:
-            if m[i-1][k]+p <= j+1 and m[i-1][k]+p > maximum:
-              maximum = m[i-1][k]+p
-        m[i][j] = maximum
+  d = dictionairePoids(poids)
+  pM = []
+  for i in range(poidsMax+1):
+    if i==0:
+      pM.append({})
+    elif i in poids:
+      pM.append({i: 1})
+    else:
+      maximum = pM[i-1]
+      for p in d:
+        for j in range(i-1, -1, -1):
+          if somme(pM[j])+p>somme(maximum) and somme(pM[j])+p<=i:
+            if p in pM[j]:
+              if pM[j][p]+1<=d[p]:
+                maximum = pM[j]
+                maximum[p] = maximum[p]+1
+            else:
+              maximum = pM[j]
+              maximum[p] = 1
+          if somme(maximum) == i:
+            break
+        if somme(maximum) == i:
+          break
+      pM.append(maximum)
   end = time.process_time()
-  return m[-1][-1], end - start
+  return pM[-1], end - start
 
-result, time = calculPoids(n, poids, poidsMax)
+result, time = calculPoids(poids, poidsMax)
 options = sys.argv[2:]
 if '-p' in options: # On imprime la solution
-  print("calcul: ", result) 
+  print(result) 
 if '-t' in options: # On imprime le temps d'exécution
-  print(time, "seconds") 
+  print(time) 
