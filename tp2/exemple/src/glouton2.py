@@ -18,7 +18,7 @@ text_file.close()
 poids = lines[1::2]
 poidsMax = int(lines[-1])
 
-start = time.time()
+debut = time.time()
 poids = sorted(poids, key=int, reverse=True) # Trie les bâtons en ordre décroissant
 poids = [ int(x) for x in poids ]
 nbDyn = len(poids)
@@ -30,10 +30,10 @@ for i in range (nbDyn):
     if sommeBatons + poids[i] < poidsMax:
         sommeBatons += poids[i]
         solution.append(poids[i])
-end = time.time()
+fin = time.time()
 
 sommeBatons = 0
-time = end - start
+temps = fin - debut
 
 for i in range(len(solution)):
     sommeBatons += solution[i]
@@ -48,13 +48,14 @@ def runSolution(solution):
     sommeBatons = 0
     for i in range(len(solution)):
         sommeBatons += solution[i]
-    output = str(time) + ";" + str(sommeBatons)
+    output = str(temps) + ";" + str(sommeBatons)
     print(output)
 
 options = sys.argv[2:]
 if '-p' in options: # On imprime la solution
     imprimerSolution(solution)
-if '-r' in options: # On imprime la solution
+if '-r' in options: # On imprime la solution et le temps
     runSolution(solution)
 if '-t' in options: # On imprime le temps d'exécution
-    print(end - start)
+    print(temps)
+    
