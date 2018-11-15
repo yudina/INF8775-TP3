@@ -59,11 +59,15 @@ def calculPoids(poids, poidsMax):
           break
       pM.append(maximum)
   end = time.process_time()
-  return pM[-1], end - start
+  result = []
+  for p in pM[-1]:
+    for i in range(pM[-1][p]):
+      result.append(p)
+  return result, end - start
 
 result, time = calculPoids(poids, poidsMax)
 options = sys.argv[2:]
 if '-p' in options: # On imprime la solution
   print(result) 
 if '-t' in options: # On imprime le temps d'exécution
-  print(time) 
+  print(time)
