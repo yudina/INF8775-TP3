@@ -48,7 +48,7 @@ def runSolution(solution):
     sommeBatons = 0
     for i in range(len(solution)):
         sommeBatons += solution[i]
-    output = str(sommeBatons) + ";" + str(time)
+    output = str(time) + ";" + str(sommeBatons)
     print(output)
 
 options = sys.argv[2:]
