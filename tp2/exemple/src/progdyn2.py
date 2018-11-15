@@ -84,7 +84,7 @@ result, time = calculPoids(poids, poidsMax)
 options = sys.argv[2:]
 if '-p' in options: # On imprime la solution
   imprimerSolution(result)
- if '-r' in options: # On imprime la solution et le temps
+if '-r' in options: # On imprime la solution et le temps
   runSolution(result)
 if '-t' in options: # On imprime le temps d'exécution
   print(time)
