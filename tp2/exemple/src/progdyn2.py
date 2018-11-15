@@ -14,7 +14,7 @@ poidsMax = int(lines[-1])
 for p in range(len(poids)):
   poids[p] = int(poids[p])
 
-print("expected: ", poidsMax)
+# print("expected: ", poidsMax)
 
 def dictionairePoids(poids):
   d = {}

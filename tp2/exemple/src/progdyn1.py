@@ -14,7 +14,7 @@ poidsMax = int(lines[-1])
 for p in range(len(poids)):
     poids[p] = int(poids[p])
 
-print("expected: ", poidsMax)
+# print("expected: ", poidsMax)
     
 def calculPoids(poids, poidsMax):
     start = time.process_time()
@@ -38,11 +38,34 @@ def calculPoids(poids, poidsMax):
         else:
             poidsPossible.append((0, []))
     end = time.process_time()
-    return poidsPossible[-1], end-start
+    
+    # retourner result sous forme de list/array
+    result = []
+    # poidsPossible[-1] = (poids, [baton1, baton2, ..., baton n])
+    # ceci explique poidsPossible[-1][1]
+    for p in range(len(poidsPossible[-1][1])):
+        result.append(poidsPossible[-1][1][p])
+    return result, end - start
+
+def imprimerSolution(solution):
+    sortie = ""
+    for i in range(len(solution)):
+        sortie += str(solution[i]) + " "
+    print(sortie)
+
+def runSolution(solution):
+    sommeBatons = 0
+    for i in range(len(solution)):
+        sommeBatons += solution[i]
+    output = str(time) + ";" + str(sommeBatons)
+    print(output)
 
 result, time = calculPoids(poids, poidsMax)
+
 options = sys.argv[2:]
 if '-p' in options: # On imprime la solution
-  print(result) 
+  imprimerSolution(result)
+if '-r' in options: # On imprime la solution et le temps
+  runSolution(result)
 if '-t' in options: # On imprime le temps d'exécution
   print(time)
