@@ -1,7 +1,7 @@
 import sys
 import time
 
-ex_path = sys.argv[1] # Path de l'exemplaire
+ex_path = "WC-10-10-01.txt" #sys.argv[1] # Path de l'exemplaire
 
 text_file = open(ex_path, 'r')
 next(text_file)

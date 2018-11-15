@@ -116,11 +116,14 @@ def imprimerSolution(s):
 # Le "main"
 extraireListeBatons()
 
-debut = time.process_time()
+debut = time.time()
 S0 = glouton()
 solutionRecuit = recuit(poids, S0)
-fin = time.process_time()
+fin = time.time()
 temps = fin - debut
+
+print(solutionRecuit)
+print(temps)
 
 options = sys.argv[2:]
 if '-p' in options: # On imprime la solution
