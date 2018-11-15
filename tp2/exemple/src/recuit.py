@@ -62,6 +62,7 @@ def choisirAleatoireBaton(batons):
 def voisin():
     global poidsPrime
     global SPrime
+    
     #    Une solution voisine est obtenue en choisissant uniformément
     #    au hasard un bâton parmi ceux qui ne sont pas encore choisis
     #    et en l’ajoutant à la solution
@@ -69,8 +70,7 @@ def voisin():
     SPrime.append(poidsPrime[nouveauBaton])
     del poidsPrime[nouveauBaton]
     
-    #    Il est possible que cela rende le poids total supérieur à P :
-    #    on retirera alors des bâtons un à un (choisis uniformément au
+    #    retirer des bâtons un à un (choisis uniformément au
     #    hasard) jusqu’à ce que le poids total ne dépasse pas P
     while int(poidsMax) < somme(SPrime):
         resultatRetire = choisirAleatoireBaton(SPrime)
@@ -95,6 +95,8 @@ def recuit(poids, S0):#(S0, T, kmax, P, α):
             
             voisin()# les arguments par réf. sont théoriquement poidsPrime, SPrime
             
+            # Si la nouvelle solution est meilleure que la solution courante ou si 
+            # la condition de probabilité est rencontrée, on met à jour la solution courante.
             delta = somme(SPrime) - somme(S0)
             exposant = math.exp(delta/theta)
             if (0 <= delta or random.uniform(0, 1) <= exposant ):
