@@ -10,6 +10,12 @@ ex_path = "PR_100_400_1.txt"#sys.argv[1] # Path de l'exemplaire
 poids = []
 poidsMax = 0
 nbDyn = 0
+
+# Recuit et voisin
+poidsPrime = 0
+SPrime = 0
+
+# temps
 debut = 0
 fin = 0
 temps = 0
@@ -53,7 +59,9 @@ def choisirAleatoireBaton(batons):
     return indexAleatoire;
 
 #https://stackoverflow.com/questions/627435/how-do-i-remove-an-element-from-a-list-by-index-in-python
-def voisin(poidsMax, poidsPrime, SPrime):
+def voisin():
+    global poidsPrime
+    global SPrime
     #    Une solution voisine est obtenue en choisissant uniformément
     #    au hasard un bâton parmi ceux qui ne sont pas encore choisis
     #    et en l’ajoutant à la solution
@@ -69,7 +77,10 @@ def voisin(poidsMax, poidsPrime, SPrime):
         poidsPrime.append(SPrime[resultatRetire])
         del SPrime[resultatRetire]
 
-def recuit(poidsMax, poids, S0):#(S0, T, kmax, P, α):
+def recuit(poids, S0):#(S0, T, kmax, P, α):
+    global poidsPrime
+    global SPrime
+    
     theta = 100 # T
     kmax = 5
     P = 5
@@ -82,8 +93,11 @@ def recuit(poidsMax, poids, S0):#(S0, T, kmax, P, α):
             SPrime = S0
             poidsPrime = poids
             
-            print()
-            voisin(poidsMax, poidsPrime, SPrime)
+            print("avant")
+            print(len(poidsPrime))
+            voisin()# les arguments par réf. sont théoriquement poidsPrime, SPrime
+            print("apres")
+            print(len(poidsPrime))
             
             delta = somme(SPrime) - somme(S0)
             exposant = math.exp(delta/theta)
@@ -109,7 +123,7 @@ extraireListeBatons()
 
 debut = time.process_time()
 S0 = glouton()
-solutionRecuit = recuit(poidsMax, poids, S0)
+solutionRecuit = recuit(poids, S0)
 fin = time.process_time()
 temps = fin - debut
 
