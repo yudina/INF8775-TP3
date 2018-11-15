@@ -2,7 +2,7 @@ import sys
 import time
 from decimal import Decimal
 
-ex_path = "WC-2000-1000-10.txt" # sys.argv[1] # Path de l'exemplaire
+ex_path = sys.argv[1] # Path de l'exemplaire
 
 poids = []
 poidsMax = 0
