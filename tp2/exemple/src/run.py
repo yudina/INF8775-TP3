@@ -1,8 +1,8 @@
 import os             
-all_files = os.listdir("../../jeux_de_donnees")  
+all_files = os.listdir("../../jeux_de_donnees/dyn1")  
 print(all_files) 
 
 import os
 
 for i in zip(all_files):
-    os.system('py progdyn1.py ../../jeux_de_donnees/%s -r' % (i))
+    os.system('py progdyn1.py ../../jeux_de_donnees/dyn1/%s -r' % (i))
