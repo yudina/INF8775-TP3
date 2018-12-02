@@ -1,4 +1,5 @@
 import numpy
+from random import randrange
 import sys
 import time
 from math import ceil, log
@@ -42,3 +43,9 @@ def extractData(file_name):
 extractData(ex_path);
 
 # END OF THE MAIN
+index = 0
+
+random_index = randrange(len(popularity))
+print("index")
+print(random_index)
+print(popularity[random_index])
