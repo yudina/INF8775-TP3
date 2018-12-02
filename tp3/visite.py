@@ -50,15 +50,39 @@ travel.append((i_hotel, popularity_hotel, adj_matrix[0][0])) # go to hotel
 # END OF THE MAIN
 
 # generate some random indexes for the beginning of the travel
-n_random_sites = int( (n_sites*0.6)-1 )
+n_random_sites = int( (n_sites*0.6) )
 i_random_sites = random.sample(range(1, n_sites), n_random_sites)
 
+cumul_time = 0
+
 for i in range(1, n_random_sites):
+    
     i_previous_site = travel[i-1][0]
+    new_time = adj_matrix[i_previous_site][i_random_sites[i]]
     # add the next random site.
     # index, popularity, time (row = previous site, column = current site)
     travel.append((i_random_sites[i], popularity[i_random_sites[i]], adj_matrix[i_previous_site][i_random_sites[i]]))
+    cumul_time += new_time
+    print(cumul_time)
+    if (cumul_time >= max_time):
+        break
+    
+sites_visited = sorted(i_random_sites, key=int, reverse=True)
+
+for i in range(len(sites_visited)):
+    j = sites_visited[i]
+    popularity.remove(popularity[j])
+
+i_min = adj_matrix.index(min(adj_matrix))
+i_max = adj_matrix.index(max(adj_matrix))
+
+# greedy with density
+for i in 
+
+print(i_min, i_max)
+
+print(popularity)
 
 # TODO: close travel. Temporary : go to hotel (wrong time from previous to hotel)
 travel.append((i_hotel, popularity_hotel, adj_matrix[0][0]))
-print(travel)
+#print(travel)
