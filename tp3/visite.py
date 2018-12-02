@@ -5,7 +5,14 @@ from math import ceil, log
 
 ex_path = "./instances/PCT_20_50" #sys.argv[1]
 
+n_sites = 0
+max_time = 0
+popularity = []
+
 def extractData(file_name):
+    global n_sites
+    global max_time
+    global popularity
     adj_matrix = []
     
     # obtain every line as int list
