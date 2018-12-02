@@ -3,12 +3,14 @@ import sys
 import time
 from math import ceil, log
 
+ex_path = "./instances/PCT_20_50" #sys.argv[1]
+
 def extractData(file_name):
     adj_matrix = []
     
     # obtain every line as int list
-    with open(file_name,'r') as copy:
-        for line in copy:
+    with open(file_name,'r') as ex:
+        for line in ex:
             line = line.strip()
             if len(line) > 1:
                adj_matrix.append([int(a) for a in line.split()])
@@ -28,4 +30,8 @@ def extractData(file_name):
 #    print(popularity)
 #    print(adj_matrix)
 
-extractData("./instances/PCT_20_50");
+
+# THE MAIN
+extractData(ex_path);
+
+# END OF THE MAIN
