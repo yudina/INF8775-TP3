@@ -5,7 +5,7 @@ import sys
 import time
 from math import ceil, log
 
-ex_path = "./instances/PCT_20_50" #sys.argv[1]
+ex_path = "./instances/PCT_200_50" #sys.argv[1]
 
 n_sites = 0
 adj_matrix = [] # row will be start point, while column will be endpoint
@@ -56,16 +56,20 @@ i_random_sites = random.sample(range(1, n_sites), n_random_sites)
 cumul_time = 0
 
 for i in range(1, n_random_sites):
-    
-    i_previous_site = travel[i-1][0]
-    new_time = adj_matrix[i_previous_site][i_random_sites[i]]
-    # add the next random site.
-    # index, popularity, time (row = previous site, column = current site)
-    travel.append((i_random_sites[i], popularity[i_random_sites[i]], adj_matrix[i_previous_site][i_random_sites[i]]))
-    cumul_time += new_time
-    print(cumul_time)
-    if (cumul_time >= max_time):
+    if (cumul_time <= max_time):
+        i_previous_site = travel[i-1][0]
+        new_time = adj_matrix[i_previous_site][i_random_sites[i]]
+        # add the next random site.
+        # index, popularity, time (row = previous site, column = current site)
+        travel.append((i_random_sites[i], popularity[i_random_sites[i]], adj_matrix[i_previous_site][i_random_sites[i]]))
+        cumul_time += new_time
+        if (cumul_time >= max_time):
+            cumul_time -= new_time
+            break
+    else:
         break
+
+print(cumul_time)
     
 sites_visited = sorted(i_random_sites, key=int, reverse=True)
 
@@ -76,10 +80,16 @@ for i in range(len(sites_visited)):
 i_min = adj_matrix.index(min(adj_matrix))
 i_max = adj_matrix.index(max(adj_matrix))
 
+density_adj = []
 # greedy with density
-for i in 
-
-print(i_min, i_max)
+for i in range(n_sites):
+    for j in range (n_sites):
+        if (i != j):
+            density_adj[i][j] = adj_matrix[i][j] / popularity[j]
+        else:
+            density_adj[i][j] = 0.0
+            
+print(density_adj)
 
 print(popularity)
 
