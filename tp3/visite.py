@@ -1,4 +1,5 @@
 import numpy
+import random
 from random import randrange
 import sys
 import time
@@ -7,6 +8,7 @@ from math import ceil, log
 ex_path = "./instances/PCT_20_50" #sys.argv[1]
 
 n_sites = 0
+adj_matrix = [] # row will be start point, while column will be endpoint
 max_time = 0
 popularity = []
 
@@ -14,7 +16,7 @@ def extractData(file_name):
     global n_sites
     global max_time
     global popularity
-    adj_matrix = []
+    global adj_matrix
     
     # obtain every line as int list
     with open(file_name,'r') as ex:
@@ -41,11 +43,19 @@ def extractData(file_name):
 
 # THE MAIN
 extractData(ex_path);
-
+i_hotel = 0
+popularity_hotel = 0
+travel = [] # index, popularity, time
+travel.append((i_hotel, popularity_hotel, adj_matrix[0][0])) # go to hotel
 # END OF THE MAIN
 index = 0
 
-random_index = randrange(len(popularity))
-print("index")
-print(random_index)
-print(popularity[random_index])
+n_random_sites = int( (n_sites*0.6)-1 )
+i_random_sites = random.sample(range(1, n_sites), n_random_sites)
+
+for i in range(1, 3):
+    i_previous = travel[i-1][0]
+    travel.append((i_random_sites[i], popularity[i_random_sites[i]], adj_matrix[i_previous][i_random_sites[i]]))
+
+travel.append((i_hotel, popularity_hotel, adj_matrix[0][0])) # TODO: close travel, go to hotel
+print(travel)
