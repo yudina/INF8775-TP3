@@ -7,19 +7,24 @@ from math import ceil, log
 
 ex_path = "./instances/PCT_20_50" #sys.argv[1]
 
-cumul_time = 0
-epsilon = 0.85
-total_popularity = 0
+# file data
 n_sites = 0
 adj_matrix = [] # row will be start point, while column will be endpoint
-density_adj = []
-avail_popularity = []
 max_time = 0
 popularity = []
-travel = [] # index, popularity, time
 
+# probability
 I_HOTEL = 0
 POP_HOTEL = 0
+
+# travel attributes
+travel = [] # list, tuple index, popularity, time
+cumul_time = 0
+total_popularity = 0
+
+# greedy
+density_adj = []
+avail_popularity = []
 
 def extractData(file_name):
     global n_sites
@@ -59,13 +64,14 @@ def calculateDensityAdj():
             else:
                 density_adj[i][j] = 0 # prevent division by 0
 
+# probabilist algorithm
 def randomBeginTravel():
     global travel
     global cumul_time
     global avail_popularity
     
     # generate n_sites*0.6 random indexes for the beginning of the travel
-    n_random_sites = int( (n_sites*0.6) )
+    n_random_sites = int( ((n_sites*27/31)-5) )
     i_random_sites = random.sample(range(1, n_sites), n_random_sites)
     
     cumul_time = 0
@@ -98,9 +104,7 @@ def randomBeginTravel():
 # THE MAIN
 extractData(ex_path);
 start_time = time.time()
-
 calculateDensityAdj();
-print(adj_matrix)
 travel.append((I_HOTEL, POP_HOTEL, adj_matrix[0][0])) # go to hotel
 randomBeginTravel();
 
