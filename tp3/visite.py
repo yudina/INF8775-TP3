@@ -8,7 +8,7 @@ from math import ceil, log
 ex_path = "./instances/PCT_20_50" #sys.argv[1]
 
 cumul_time = 0
-relative_e = 0.20
+epsilon = 0.85
 total_popularity = 0
 n_sites = 0
 adj_matrix = [] # row will be start point, while column will be endpoint
@@ -52,10 +52,11 @@ def calculateDensityAdj():
     
     for i in range(n_sites):
         for j in range (n_sites):
-            if (i != j & popularity[j] != 0.0):
-                density_adj[i][j] = adj_matrix[i][j] / popularity[j]
+            if (i != j | adj_matrix[i][j] != 0 | popularity[j] != 0):
+                density_adj[i][j] = popularity[j] / adj_matrix[i][j]
             else:
-                density_adj[i][j] = adj_matrix[i][j]
+                density_adj[i][j] = 1000#adj_matrix[i][j]
+    print(density_adj)
 
 def randomBeginTravel():
     global travel
@@ -75,7 +76,7 @@ def randomBeginTravel():
             new_time = adj_matrix[i_previous_site][i_random_sites[i]]
             
             # add the next random site.
-            # index, popularity, time (row = previous site, column = current site)
+            # index, popularity, travel time
             travel.append((i_random_sites[i], popularity[i_random_sites[i]], adj_matrix[i_previous_site][i_random_sites[i]]))
             cumul_time += new_time
             if (cumul_time >= max_time):
@@ -100,11 +101,29 @@ calculateDensityAdj();
 travel.append((I_HOTEL, POP_HOTEL, adj_matrix[0][0])) # go to hotel
 randomBeginTravel();
 
-
 # END OF THE MAIN
 
-print(density_adj)
+min_density = numpy.argwhere(density_adj == numpy.min(density_adj))
+print(min_density)
 
+# Determine if should continue
+optimal = sum(popularity)
+#print(optimal)
+
+value = 0
+for i in range(len(travel)):
+    value += travel[i][1]
+#print(cumul_time)
+#print(value)
+#print(travel)
+
+
+
+# TODO: POOP
 # TODO: close travel. Temporary : go to hotel (wrong time from previous to hotel)
 travel.append((I_HOTEL, POP_HOTEL, adj_matrix[0][0]))
 #print(travel)
+
+end_time = time.time()
+runtime = end_time - start_time
+#print(runtime);
