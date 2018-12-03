@@ -13,7 +13,7 @@ adj_matrix = [] # row will be start point, while column will be endpoint
 max_time = 0
 popularity = []
 
-# probability
+# probabilistic
 I_HOTEL = 0
 POP_HOTEL = 0
 
@@ -79,17 +79,17 @@ def randomBeginTravel():
     # choose random sites
     for i in range(1, n_random_sites):
         if (cumul_time <= max_time):
+            print(travel[i-1][0])
             i_previous_site = travel[i-1][0]
             new_time = adj_matrix[i_previous_site][i_random_sites[i]]
             
             # add the next random site.
             # index, popularity, travel time
-            travel.append((i_random_sites[i], popularity[i_random_sites[i]], adj_matrix[i_previous_site][i_random_sites[i]]))
-            cumul_time += new_time
-            if (cumul_time >= max_time):
-                cumul_time -= new_time
-                break
-        else:
+            if (cumul_time + new_time <= max_time):
+                travel.append((i_random_sites[i], popularity[i_random_sites[i]], adj_matrix[i_previous_site][i_random_sites[i]]))
+                cumul_time += new_time
+        else: # max_time reached
+            print(cumul_time + new_time)
             break
     
     # remove visited, and place non-visited in a copy
@@ -105,14 +105,21 @@ def randomBeginTravel():
 extractData(ex_path);
 start_time = time.time()
 calculateDensityAdj();
+
+# start probabilistic
 travel.append((I_HOTEL, POP_HOTEL, adj_matrix[0][0])) # go to hotel
 randomBeginTravel();
 
+#print(avail_popularity)
+#print(cumul_time)
+#print(adj_matrix)
+#print(density_adj)
+
+#if(cumul_time <= max_time):
+
 # END OF THE MAIN
 
-min_density = numpy.argwhere(density_adj == numpy.max(density_adj))
-#print(min_density)
-min_min = numpy.argwhere(adj_matrix == numpy.max(adj_matrix))
+max_density = numpy.argwhere(density_adj == numpy.max(density_adj))
 
 
 # Determine if should continue
