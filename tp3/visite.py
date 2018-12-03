@@ -50,15 +50,14 @@ def calculateDensityAdj():
     global density_adj
     global adj_matrix
     
-    print(adj_matrix)
-    adj_copy = adj_matrix.copy() #[[0.0 for x in range(n_sites)] for y in range(n_sites)]
+    density_adj = [[0.0 for x in range(n_sites)] for y in range(n_sites)]
     
     for i in range(n_sites):
         for j in range (n_sites):
-            if (i != j | adj_copy[i][j] != 0 | popularity[j] != 0):
-                density_adj[i][j] = popularity[j] / adj_copy[i][j]
+            if (i != j | adj_matrix[i][j] != 0):
+                density_adj[i][j] = popularity[j] / adj_matrix[i][j]
             else:
-                density_adj[i][j] = 1000#adj_matrix[i][j]
+                density_adj[i][j] = 0 # prevent division by 0
 
 def randomBeginTravel():
     global travel
@@ -107,9 +106,9 @@ randomBeginTravel();
 
 # END OF THE MAIN
 
-min_density = numpy.argwhere(density_adj == numpy.min(density_adj))
+min_density = numpy.argwhere(density_adj == numpy.max(density_adj))
 #print(min_density)
-min_min = numpy.argwhere(adj_matrix == numpy.min(adj_matrix))
+min_min = numpy.argwhere(adj_matrix == numpy.max(adj_matrix))
 
 
 # Determine if should continue
