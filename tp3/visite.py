@@ -48,15 +48,17 @@ def extractData(file_name):
 # greedy with density
 def calculateDensityAdj():
     global density_adj
-    density_adj = [[0.0 for x in range(n_sites)] for y in range(n_sites)]
+    global adj_matrix
+    
+    print(adj_matrix)
+    adj_copy = adj_matrix.copy() #[[0.0 for x in range(n_sites)] for y in range(n_sites)]
     
     for i in range(n_sites):
         for j in range (n_sites):
-            if (i != j | adj_matrix[i][j] != 0 | popularity[j] != 0):
-                density_adj[i][j] = popularity[j] / adj_matrix[i][j]
+            if (i != j | adj_copy[i][j] != 0 | popularity[j] != 0):
+                density_adj[i][j] = popularity[j] / adj_copy[i][j]
             else:
                 density_adj[i][j] = 1000#adj_matrix[i][j]
-    print(density_adj)
 
 def randomBeginTravel():
     global travel
@@ -97,14 +99,18 @@ def randomBeginTravel():
 # THE MAIN
 extractData(ex_path);
 start_time = time.time()
+
 calculateDensityAdj();
+print(adj_matrix)
 travel.append((I_HOTEL, POP_HOTEL, adj_matrix[0][0])) # go to hotel
 randomBeginTravel();
 
 # END OF THE MAIN
 
 min_density = numpy.argwhere(density_adj == numpy.min(density_adj))
-print(min_density)
+#print(min_density)
+min_min = numpy.argwhere(adj_matrix == numpy.min(adj_matrix))
+
 
 # Determine if should continue
 optimal = sum(popularity)
