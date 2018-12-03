@@ -5,7 +5,7 @@ import sys
 import time
 from math import ceil, log
 
-ex_path = "./instances/PCT_200_50" #sys.argv[1]
+ex_path = "./instances/PCT_20_50" #sys.argv[1]
 
 n_sites = 0
 adj_matrix = [] # row will be start point, while column will be endpoint
@@ -41,6 +41,7 @@ def extractData(file_name):
 #    print(adj_matrix)
 
 
+
 # THE MAIN
 extractData(ex_path);
 i_hotel = 0
@@ -48,6 +49,8 @@ popularity_hotel = 0
 travel = [] # index, popularity, time
 travel.append((i_hotel, popularity_hotel, adj_matrix[0][0])) # go to hotel
 # END OF THE MAIN
+
+print("h", len(adj_matrix), "w", len(adj_matrix[0]))
 
 # generate some random indexes for the beginning of the travel
 n_random_sites = int( (n_sites*0.6) )
@@ -68,30 +71,30 @@ for i in range(1, n_random_sites):
             break
     else:
         break
-
-print(cumul_time)
     
 sites_visited = sorted(i_random_sites, key=int, reverse=True)
+popularity_avail = popularity
 
-for i in range(len(sites_visited)):
-    j = sites_visited[i]
-    popularity.remove(popularity[j])
+#print("adj", adj_matrix, "pop", popularity)
 
-i_min = adj_matrix.index(min(adj_matrix))
-i_max = adj_matrix.index(max(adj_matrix))
+#for i in range(len(sites_visited)):
+#    j = sites_visited[i]
+#    popularity_avail.remove(popularity_avail[j])
 
-density_adj = []
+density_adj = [[0.0 for x in range(n_sites)] for y in range(n_sites)]
+
+
+
 # greedy with density
 for i in range(n_sites):
     for j in range (n_sites):
-        if (i != j):
+        if (i != j & popularity[j] != 0.0):
             density_adj[i][j] = adj_matrix[i][j] / popularity[j]
         else:
-            density_adj[i][j] = 0.0
+            density_adj[i][j] = adj_matrix[i][j]
             
-print(density_adj)
 
-print(popularity)
+print(density_adj)
 
 # TODO: close travel. Temporary : go to hotel (wrong time from previous to hotel)
 travel.append((i_hotel, popularity_hotel, adj_matrix[0][0]))
