@@ -7,10 +7,17 @@ from math import ceil, log
 
 ex_path = "./instances/PCT_20_50" #sys.argv[1]
 
+relative_e = 0.20
+total_popularity = 0
 n_sites = 0
 adj_matrix = [] # row will be start point, while column will be endpoint
+density_adj = []
 max_time = 0
 popularity = []
+travel = [] # index, popularity, time
+
+I_HOTEL = 0
+POP_HOTEL = 0
 
 def extractData(file_name):
     global n_sites
@@ -34,23 +41,26 @@ def extractData(file_name):
     adj_matrix.remove(adj_matrix[0])
     adj_matrix.remove(adj_matrix[-2])
     adj_matrix.remove(adj_matrix[-1])
+
+
+# greedy with density
+def calculateDensityAdj():
+    global density_adj
+    density_adj = [[0.0 for x in range(n_sites)] for y in range(n_sites)]
     
-#    print(n_sites)
-#    print(max_time)
-#    print(popularity)
-#    print(adj_matrix)
-
-
+    for i in range(n_sites):
+        for j in range (n_sites):
+            if (i != j & popularity[j] != 0.0):
+                density_adj[i][j] = adj_matrix[i][j] / popularity[j]
+            else:
+                density_adj[i][j] = adj_matrix[i][j]
 
 # THE MAIN
 extractData(ex_path);
-i_hotel = 0
-popularity_hotel = 0
-travel = [] # index, popularity, time
-travel.append((i_hotel, popularity_hotel, adj_matrix[0][0])) # go to hotel
+start_time = time.time()
+calculateDensityAdj();
+travel.append((I_HOTEL, POP_HOTEL, adj_matrix[0][0])) # go to hotel
 # END OF THE MAIN
-
-print("h", len(adj_matrix), "w", len(adj_matrix[0]))
 
 # generate some random indexes for the beginning of the travel
 n_random_sites = int( (n_sites*0.6) )
@@ -73,29 +83,17 @@ for i in range(1, n_random_sites):
         break
     
 sites_visited = sorted(i_random_sites, key=int, reverse=True)
-popularity_avail = popularity
+popularity_avail = popularity.copy()
 
 #print("adj", adj_matrix, "pop", popularity)
 
-#for i in range(len(sites_visited)):
-#    j = sites_visited[i]
-#    popularity_avail.remove(popularity_avail[j])
+for i in range(len(sites_visited)):
+    j = sites_visited[i]
+    popularity_avail.remove(popularity_avail[j])
 
-density_adj = [[0.0 for x in range(n_sites)] for y in range(n_sites)]
-
-
-
-# greedy with density
-for i in range(n_sites):
-    for j in range (n_sites):
-        if (i != j & popularity[j] != 0.0):
-            density_adj[i][j] = adj_matrix[i][j] / popularity[j]
-        else:
-            density_adj[i][j] = adj_matrix[i][j]
-            
 
 print(density_adj)
 
 # TODO: close travel. Temporary : go to hotel (wrong time from previous to hotel)
-travel.append((i_hotel, popularity_hotel, adj_matrix[0][0]))
+travel.append((I_HOTEL, POP_HOTEL, adj_matrix[0][0]))
 #print(travel)
