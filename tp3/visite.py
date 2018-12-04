@@ -123,7 +123,7 @@ def maxDensity(d_line, a_popularity):
     
     for i in range(len(sorted_d_line)):
         if(sorted_d_line[i][1] in a_popularity):
-            return a_popularity[i]
+            return sorted_d_line[i][1]
     return 0
 
 def findGreedyTravel():
