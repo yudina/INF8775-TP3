@@ -82,48 +82,55 @@ def randomBeginTravel():
     visited = sorted(i_random_sites, key=int, reverse=True)
     avail_popularity = []
     
-    for i in range(len(popularity)):
+    # avail_popularity contains the index of unvisited sites
+    for i in range(n_sites):
         avail_popularity.append(i)
     
+    # remove visited places
     for i in range(len(visited)):
         j = visited[i]
         avail_popularity.remove(avail_popularity[j])
         
     avail_popularity.remove(0) # remove hotel
 
+# calculate total time of travel
 def calculate_cumul(trav):
     total = 0
     for i in range(len(trav)):
         total += trav[i][2]
     return total
 
+# calculate total popularity of travel
 def calculate_pop(trav):
     total = 0
     for i in range(len(trav)):
         total += trav[i][1]
     return total
 
+# return de density matrix for the row i_current_site (last site of the travel)
 def calculateDensityLine(i_current_site):
-    d_line = [] # [0 for x in range(n_sites)]
+    d_line = []
     for i in range(n_sites):
         if (adj_matrix[i_current_site][i] != 0):
             d_line.append( (popularity[i]/adj_matrix[i_current_site][i], i) )
         else:
             d_line.append( (0, i) )
     return d_line
-    
+
+# sort density in decreasing order, then return the index of the highest possible
+# density (a density which column corresponds to a free n in avail_popularity)
 def maxDensity(d_line, a_popularity):
     sorted_d_line = []
-    max_d = 0.0
+    
     sorted_d_line = sorted(d_line, key=lambda x: x[0], reverse=True)
+    
     for i in range(len(sorted_d_line)):
         if(sorted_d_line[i][1] in a_popularity):
             return a_popularity[i]
-    return max_d
+    return 0
     
 # THE MAIN
 extractData(ex_path);
-start_time = time.time()
 
 # start probabilistic
 travel.append((I_HOTEL, POP_HOTEL, adj_matrix[0][0])) # go to hotel
@@ -158,12 +165,8 @@ for i in range(avail_len):
 print(travel)
 print(cumul_time)
 print(calculate_pop(travel))
-        
 
 # Determine if should continue
 optimal = sum(popularity)
 print(optimal)
-
-end_time = time.time()
-runtime = end_time - start_time
 #print(runtime);
