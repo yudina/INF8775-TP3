@@ -52,8 +52,8 @@ def randomBeginTravel():
     global travel
     global avail_popularity
     
-    # generate n_sites*0.35 random indexes for the beginning of the travel
-    n_random_sites = int( (n_sites)*0.35 ) # *27/31)-5) )
+    # generate n_sites*0.1 random indexes for the beginning of the travel
+    n_random_sites = int( (n_sites)*0.1 )
     i_random_sites = random.sample(range(1, n_sites), n_random_sites)
     
     cumul_time = 0
