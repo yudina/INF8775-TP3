@@ -1,9 +1,7 @@
 import random
-from random import randrange
 import sys
-from math import ceil, log
 
-ex_path = "./instances/PCT_200_50" #sys.argv[1]
+ex_path = sys.argv[1]
 
 # file data
 n_sites = 0
@@ -179,12 +177,10 @@ findGreedyTravel()
 goBackHotel()
 # END OF THE MAIN
 
-        
-print(travel)
-print(calculateCumul(travel))
-print(calculatePop(travel))
+def printTravel():
+    for i in range(len(travel)):
+        print(travel[i][0], end=" ")
 
-# Determine if should continue
-optimal = sum(popularity)
-print(optimal)
-#print(runtime);
+options = sys.argv[2:]
+if '-p' in options: # Print result
+    printTravel()
