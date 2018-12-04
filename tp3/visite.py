@@ -1,8 +1,6 @@
-import numpy
 import random
 from random import randrange
 import sys
-import time
 from math import ceil, log
 
 ex_path = "./instances/PCT_200_50" #sys.argv[1]
@@ -19,11 +17,9 @@ POP_HOTEL = 0
 
 # travel attributes
 travel = [] # list, tuple index, popularity, time
-cumul_time = 0
-total_popularity = 0
 
 # greedy
-density_adj = []
+density_line = []
 avail_popularity = []
 
 def extractData(file_name):
@@ -52,7 +48,6 @@ def extractData(file_name):
 # probabilist algorithm
 def randomBeginTravel():
     global travel
-    global cumul_time
     global avail_popularity
     
     # generate n_sites*0.35 random indexes for the beginning of the travel
@@ -67,8 +62,8 @@ def randomBeginTravel():
             i_previous_site = travel[i-1][0]
             new_time = adj_matrix[i_previous_site][i_random_sites[i]]
             
-            # add the next random site.
-            # index, popularity, travel time
+            # check if can add the next random site.
+            # travel tuplet : site index, site popularity, travel time to site
             if (cumul_time + new_time <= max_time):
                 travel.append((i_random_sites[i], popularity[i_random_sites[i]], new_time))
                 cumul_time += new_time
@@ -128,39 +123,46 @@ def maxDensity(d_line, a_popularity):
         if(sorted_d_line[i][1] in a_popularity):
             return a_popularity[i]
     return 0
+
+def findGreedyTravel():
+    global travel
+    global avail_popularity
+    global density_line
     
-# THE MAIN
-extractData(ex_path);
-
-# start probabilistic
-travel.append((I_HOTEL, POP_HOTEL, adj_matrix[0][0])) # go to hotel
-randomBeginTravel();
-
-#if(cumul_time <= max_time):
-
-# END OF THE MAIN
-density_line = []
-
-avail_len = len(avail_popularity)
-for i in range(avail_len):
-    if(calculate_cumul(travel) <= max_time):
-        i_current_site = travel[-1][0]
-        density_line = calculateDensityLine(i_current_site)
+    avail_len = len(avail_popularity)
+    for i in range(avail_len):
         
-        i_max_density = maxDensity(density_line, avail_popularity) # density_line[max_density][1]
+        cumul_time = calculate_cumul(travel)
         
-        new_time = adj_matrix[i_current_site][i_max_density]
-        
-        # add the next random site.
-        # index, popularity, travel time
-        if (cumul_time + new_time <= max_time):
-            travel.append((i_max_density, popularity[i_max_density], new_time))
-            cumul_time += new_time
-            avail_popularity.remove(i_max_density)
-        else: # max_time reached
+        if(cumul_time <= max_time):
+            # current row index is index of current travel site
+            i_current_site = travel[-1][0]
+            density_line = calculateDensityLine(i_current_site)
+            
+            # get the index of the maximum available density
+            i_max_density = maxDensity(density_line, avail_popularity)
+            
+            # time from current site to new site
+            new_time = adj_matrix[i_current_site][i_max_density]
+            
+            # check if can add the new site
+            # travel tuplet : site index, site popularity, travel time to site
+            if (cumul_time + new_time <= max_time):
+                travel.append((i_max_density, popularity[i_max_density], new_time))
+                avail_popularity.remove(i_max_density)
+            else: # max_time reached
+                break
+        else:
             break
-    else:
-        break
+        
+
+# THE MAIN
+extractData(ex_path)
+travel.append((I_HOTEL, POP_HOTEL, adj_matrix[0][0])) # go to hotel
+randomBeginTravel()
+findGreedyTravel()
+# END OF THE MAIN
+
         
 print(travel)
 print(cumul_time)
