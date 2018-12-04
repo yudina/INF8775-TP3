@@ -95,10 +95,12 @@ def randomBeginTravel():
     # copy popularity, and remove visited sites in the copy
     # visited is reversed, so we delete elements in decreasing order of index
     visited = sorted(i_random_sites, key=int, reverse=True)
+    visited.insert(0, 0) # mark hotel as visited
     avail_popularity = []
+    print(visited)
     
     for i in range(len(popularity)):
-        avail_popularity.append((i, popularity[i]))
+        avail_popularity.append(i)
     
     for i in range(len(visited)):
         j = visited[i]
@@ -125,11 +127,6 @@ calculateDensityAdj();
 travel.append((I_HOTEL, POP_HOTEL, adj_matrix[0][0])) # go to hotel
 randomBeginTravel();
 
-#print(avail_popularity)
-#print(cumul_time)
-#print(adj_matrix)
-#print(density_adj)
-
 #if(cumul_time <= max_time):
 
 # END OF THE MAIN
@@ -139,9 +136,8 @@ randomBeginTravel();
 
 
 
-def calculateDensityLine():
+def calculateDensityLine(i_current_site):
     d_line = [] # [0 for x in range(n_sites)]
-    i_current_site = travel[-1][0]
     for i in range(n_sites):
         if (adj_matrix[i_current_site][i] != 0):
             d_line.append( (popularity[i]/adj_matrix[i_current_site][i], i) )
@@ -149,16 +145,25 @@ def calculateDensityLine():
             d_line.append( (0, i) )
     return d_line
     
+def maxDensity(d_line):
+    sorted_d_line = []
     
+    sorted_d_line = sorted(d_line, key=lambda x: x[0], reverse=True)
+    
+    return 0
+
 density_line = []
 
 avail = len(avail_popularity)
 for i in range(avail):
     if(calculate_cumul(travel) <= max_time):
-        density_line = calculateDensityLine()
-        
         i_current_site = travel[-1][0]
-        max_density = density_line.index(max(density_line))
+        density_line = calculateDensityLine(i_current_site)
+        
+        #max_density = density_line.index(max(density_line))
+        
+        
+        max_density = maxDensity(density_line)
         i_max_density = density_line[max_density][1]
         
         new_time = adj_matrix[i_current_site][i_max_density]
@@ -168,7 +173,7 @@ for i in range(avail):
         if (cumul_time + new_time <= max_time):
             travel.append((i_max_density, popularity[i_max_density], new_time))
             cumul_time += new_time
-            avail
+            avail_popularity.remove(avail_popularity[i_current_site])
         else: # max_time reached
             break
     else:
