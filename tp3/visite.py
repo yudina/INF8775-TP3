@@ -15,8 +15,11 @@ I_HOTEL = 0
 POP_HOTEL = 0
 
 # travel attributes
-travel = [] # list, tuple index, popularity, time
-best = 0
+travel = [] # list of tuple : index, popularity, time
+I_SITE = 0
+I_POP = 1
+I_TIME = 2
+best = 0 # best score
 
 # greedy
 avail_popularity = []
@@ -54,6 +57,7 @@ def randomBeginTravel():
     
     # generate n_sites*0.1 random indexes for the beginning of the travel
     n_random_sites = int( (n_sites)*0.1 )
+    # range(1, n_sites) so hotel is not generated
     i_random_sites = random.sample(range(1, n_sites), n_random_sites)
     
     cumul_time = 0
@@ -61,7 +65,7 @@ def randomBeginTravel():
     # choose random sites
     for i in range(1, n_random_sites):
         if (cumul_time <= max_time):
-            i_previous_site = travel[i-1][0]
+            i_previous_site = travel[i-1][I_SITE]
             new_time = adj_matrix[i_previous_site][i_random_sites[i]]
             
             # check if can add the next random site.
@@ -88,20 +92,20 @@ def randomBeginTravel():
         j = visited[i]
         avail_popularity.remove(avail_popularity[j])
         
-    avail_popularity.remove(0) # remove hotel
+    avail_popularity.remove(I_HOTEL) # remove hotel
 
 # calculate total time of travel
 def calculateCumul(trav):
     total = 0
     for i in range(len(trav)):
-        total += trav[i][2]
+        total += trav[i][I_TIME]
     return total
 
 # calculate total popularity of travel
 def calculatePop(trav):
     total = 0
     for i in range(len(trav)):
-        total += trav[i][1]
+        total += trav[i][I_POP]
     return total
 
 # return de density matrix for the row i_current_site (last site of the travel)
@@ -138,7 +142,7 @@ def findGreedyTravel():
         
         if(cumul_time <= max_time):
             # current row index is index of current travel site
-            i_current_site = travel[-1][0]
+            i_current_site = travel[-1][I_SITE]
             density_line = calculateDensityLine(i_current_site)
             
             # get the index of the maximum available density
@@ -160,15 +164,28 @@ def findGreedyTravel():
 def goBackHotel():
     global travel
     
-    for i in range(N_BACKTRACK):
-        if(travel[-1][0] != I_HOTEL):
-            travel.remove(travel[-1])
-            
-            new_time = adj_matrix[travel[-1][0]][I_HOTEL]
-            
-            if (calculateCumul(travel) + new_time <= max_time):
-                travel.append( (I_HOTEL, POP_HOTEL, new_time) )
-                return
+    # please forgive us for some code duplication.
+    
+    # current row index is index of current travel site
+    i_current_site = travel[-1][I_SITE]
+    
+    # time from current site to hotel
+    new_time = adj_matrix[i_current_site][I_HOTEL]
+    
+    # try to directly go to hotel, else backtrack and try
+    if (calculateCumul(travel) + new_time <= max_time):
+        travel.append( (I_HOTEL, POP_HOTEL, new_time) )
+        return
+    else:
+        for i in range(N_BACKTRACK):
+            if(travel[-1][0] != I_HOTEL):
+                travel.remove(travel[-1])
+                
+                new_time = adj_matrix[travel[-1][0]][I_HOTEL]
+                
+                if (calculateCumul(travel) + new_time <= max_time):
+                    travel.append( (I_HOTEL, POP_HOTEL, new_time) )
+                    return
 
 def printTravel():
     for i in range(len(travel)):
