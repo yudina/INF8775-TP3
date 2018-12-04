@@ -22,6 +22,9 @@ travel = [] # list, tuple index, popularity, time
 density_line = []
 avail_popularity = []
 
+# go back
+N_BACKTRACK = 5
+
 def extractData(file_name):
     global n_sites
     global max_time
@@ -89,14 +92,14 @@ def randomBeginTravel():
     avail_popularity.remove(0) # remove hotel
 
 # calculate total time of travel
-def calculate_cumul(trav):
+def calculateCumul(trav):
     total = 0
     for i in range(len(trav)):
         total += trav[i][2]
     return total
 
 # calculate total popularity of travel
-def calculate_pop(trav):
+def calculatePop(trav):
     total = 0
     for i in range(len(trav)):
         total += trav[i][1]
@@ -132,7 +135,7 @@ def findGreedyTravel():
     avail_len = len(avail_popularity)
     for i in range(avail_len):
         
-        cumul_time = calculate_cumul(travel)
+        cumul_time = calculateCumul(travel)
         
         if(cumul_time <= max_time):
             # current row index is index of current travel site
@@ -155,18 +158,31 @@ def findGreedyTravel():
         else:
             break
         
+def goBackHotel():
+    global travel
+    
+    for i in range(N_BACKTRACK):
+        if(travel[-1][0] != I_HOTEL):
+            travel.remove(travel[-1])
+            
+            new_time = adj_matrix[travel[-1][0]][I_HOTEL]
+            
+            if (calculateCumul(travel) + new_time <= max_time):
+                travel.append( (I_HOTEL, POP_HOTEL, new_time) )
+                return
 
 # THE MAIN
 extractData(ex_path)
-travel.append((I_HOTEL, POP_HOTEL, adj_matrix[0][0])) # go to hotel
+travel.append((I_HOTEL, POP_HOTEL, adj_matrix[I_HOTEL][I_HOTEL])) # go to hotel
 randomBeginTravel()
 findGreedyTravel()
+goBackHotel()
 # END OF THE MAIN
 
         
 print(travel)
-print(cumul_time)
-print(calculate_pop(travel))
+print(calculateCumul(travel))
+print(calculatePop(travel))
 
 # Determine if should continue
 optimal = sum(popularity)
