@@ -132,12 +132,13 @@ density_line = [] # [0 for x in range(n_sites)]
 
 for i in range(n_sites):
     if (adj_matrix[i_current_site][i] != 0):
-        density_line.append( (i, popularity[i]/adj_matrix[i_current_site][i]) )
+        density_line.append( (popularity[i]/adj_matrix[i_current_site][i], i) )
     else:
-        density_line.append( (i, 0) )
+        density_line.append( (0, i) )
 
 max_density = density_line.index(max(density_line))
 print(max_density)
+print(density_line)
 
 #for i in range(len(avail_popularity)):
 #    if(calculate_cumul(travel) <= max_time*0.75):
