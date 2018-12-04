@@ -124,11 +124,27 @@ randomBeginTravel();
 #if(cumul_time <= max_time):
 
 # END OF THE MAIN
-print(len(avail_popularity))
-print(calculate_cumul(travel))
-for i in range(len(avail_popularity)):
-    if(calculate_cumul(travel) <= max_time):
-        max_density = numpy.argwhere(density_adj == numpy.max(density_adj[i]))
+
+i_current_site = travel[-1][0]
+
+
+density_line = [] # [0 for x in range(n_sites)]
+
+for i in range(n_sites):
+    if (adj_matrix[i_current_site][i] != 0):
+        density_line.append( (i, popularity[i]/adj_matrix[i_current_site][i]) )
+    else:
+        density_line.append( (i, 0) )
+
+max_density = density_line.index(max(density_line))
+print(max_density)
+
+#for i in range(len(avail_popularity)):
+#    if(calculate_cumul(travel) <= max_time*0.75):
+#        
+        
+        
+        
         
 
 # Determine if should continue
