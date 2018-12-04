@@ -100,7 +100,12 @@ def randomBeginTravel():
     for i in range(len(visited)):
         j = visited[i]
         avail_popularity.remove(avail_popularity[j])
-    
+
+def calculate_cumul(trav):
+    total = 0
+    for i in range(len(trav)):
+        total += trav[i][2]
+    return total
     
 # THE MAIN
 extractData(ex_path);
@@ -119,9 +124,12 @@ randomBeginTravel();
 #if(cumul_time <= max_time):
 
 # END OF THE MAIN
-
-max_density = numpy.argwhere(density_adj == numpy.max(density_adj))
-
+print(len(avail_popularity))
+print(calculate_cumul(travel))
+for i in range(len(avail_popularity)):
+    if(calculate_cumul(travel) <= max_time):
+        max_density = numpy.argwhere(density_adj == numpy.max(density_adj[i]))
+        
 
 # Determine if should continue
 optimal = sum(popularity)
@@ -134,9 +142,6 @@ for i in range(len(travel)):
 #print(value)
 #print(travel)
 
-
-
-# TODO: POOP
 # TODO: close travel. Temporary : go to hotel (wrong time from previous to hotel)
 travel.append((I_HOTEL, POP_HOTEL, adj_matrix[0][0]))
 #print(travel)
