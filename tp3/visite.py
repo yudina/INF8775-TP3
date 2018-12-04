@@ -5,7 +5,7 @@ import sys
 import time
 from math import ceil, log
 
-ex_path = "./instances/PCT_20_50" #sys.argv[1]
+ex_path = "./instances/PCT_200_50" #sys.argv[1]
 
 # file data
 n_sites = 0
@@ -48,21 +48,6 @@ def extractData(file_name):
     adj_matrix.remove(adj_matrix[0])
     adj_matrix.remove(adj_matrix[-2])
     adj_matrix.remove(adj_matrix[-1])
-
-
-# greedy with density
-def calculateDensityAdj():
-    global density_adj
-    global adj_matrix
-    
-    density_adj = [[0.0 for x in range(n_sites)] for y in range(n_sites)]
-    
-    for i in range(n_sites):
-        for j in range (n_sites):
-            if (i != j | adj_matrix[i][j] != 0):
-                density_adj[i][j] = popularity[j] / adj_matrix[i][j]
-            else:
-                density_adj[i][j] = 0 # prevent division by 0
 
 # probabilist algorithm
 def randomBeginTravel():
@@ -117,19 +102,6 @@ def calculate_pop(trav):
     for i in range(len(trav)):
         total += trav[i][1]
     return total
-    
-# THE MAIN
-extractData(ex_path);
-start_time = time.time()
-calculateDensityAdj();
-
-# start probabilistic
-travel.append((I_HOTEL, POP_HOTEL, adj_matrix[0][0])) # go to hotel
-randomBeginTravel();
-
-#if(cumul_time <= max_time):
-
-# END OF THE MAIN
 
 def calculateDensityLine(i_current_site):
     d_line = [] # [0 for x in range(n_sites)]
@@ -148,7 +120,18 @@ def maxDensity(d_line, a_popularity):
         if(sorted_d_line[i][1] in a_popularity):
             return a_popularity[i]
     return max_d
+    
+# THE MAIN
+extractData(ex_path);
+start_time = time.time()
 
+# start probabilistic
+travel.append((I_HOTEL, POP_HOTEL, adj_matrix[0][0])) # go to hotel
+randomBeginTravel();
+
+#if(cumul_time <= max_time):
+
+# END OF THE MAIN
 density_line = []
 
 avail_len = len(avail_popularity)
@@ -157,10 +140,6 @@ for i in range(avail_len):
         i_current_site = travel[-1][0]
         density_line = calculateDensityLine(i_current_site)
         
-        
-        #max_density = density_line.index(max(density_line))
-        
-        #max_density = maxDensity(density_line, avail_popularity)
         i_max_density = maxDensity(density_line, avail_popularity) # density_line[max_density][1]
         
         new_time = adj_matrix[i_current_site][i_max_density]
@@ -169,31 +148,21 @@ for i in range(avail_len):
         # index, popularity, travel time
         if (cumul_time + new_time <= max_time):
             travel.append((i_max_density, popularity[i_max_density], new_time))
-            
             cumul_time += new_time
             avail_popularity.remove(i_max_density)
-            print(avail_popularity)
         else: # max_time reached
             break
     else:
         break
         
+print(travel)
+print(cumul_time)
+print(calculate_pop(travel))
         
 
 # Determine if should continue
 optimal = sum(popularity)
-#print(optimal)
-
-value = 0
-for i in range(len(travel)):
-    value += travel[i][1]
-#print(cumul_time)
-#print(value)
-#print(travel)
-
-# TODO: close travel. Temporary : go to hotel (wrong time from previous to hotel)
-travel.append((I_HOTEL, POP_HOTEL, adj_matrix[0][0]))
-#print(travel)
+print(optimal)
 
 end_time = time.time()
 runtime = end_time - start_time
