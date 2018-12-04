@@ -79,7 +79,6 @@ def randomBeginTravel():
     # choose random sites
     for i in range(1, n_random_sites):
         if (cumul_time <= max_time):
-            print(travel[i-1][0])
             i_previous_site = travel[i-1][0]
             new_time = adj_matrix[i_previous_site][i_random_sites[i]]
             
@@ -88,11 +87,13 @@ def randomBeginTravel():
             if (cumul_time + new_time <= max_time):
                 travel.append((i_random_sites[i], popularity[i_random_sites[i]], adj_matrix[i_previous_site][i_random_sites[i]]))
                 cumul_time += new_time
-        else: # max_time reached
-            print(cumul_time + new_time)
+            else: # max_time reached
+                break
+        else:
             break
     
-    # remove visited, and place non-visited in a copy
+    # copy popularity, and remove visited sites in the copy
+    # visited is reversed, so we delete elements in decreasing order of index
     visited = sorted(i_random_sites, key=int, reverse=True)
     avail_popularity = popularity.copy()
     
