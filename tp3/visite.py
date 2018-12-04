@@ -2,6 +2,7 @@ import random
 import sys
 
 ex_path = sys.argv[1]
+options = sys.argv[2:]
 
 # file data
 n_sites = 0
@@ -15,9 +16,9 @@ POP_HOTEL = 0
 
 # travel attributes
 travel = [] # list, tuple index, popularity, time
+best = 0
 
 # greedy
-density_line = []
 avail_popularity = []
 
 # go back
@@ -128,7 +129,7 @@ def maxDensity(d_line, a_popularity):
 def findGreedyTravel():
     global travel
     global avail_popularity
-    global density_line
+    density_line = []
     
     avail_len = len(avail_popularity)
     for i in range(avail_len):
@@ -169,18 +170,31 @@ def goBackHotel():
                 travel.append( (I_HOTEL, POP_HOTEL, new_time) )
                 return
 
-# THE MAIN
-extractData(ex_path)
-travel.append((I_HOTEL, POP_HOTEL, adj_matrix[I_HOTEL][I_HOTEL])) # go to hotel
-randomBeginTravel()
-findGreedyTravel()
-goBackHotel()
-# END OF THE MAIN
-
 def printTravel():
     for i in range(len(travel)):
         print(travel[i][0], end=" ")
+    print()
 
-options = sys.argv[2:]
-if '-p' in options: # Print result
-    printTravel()
+# MAIN
+extractData(ex_path)
+
+while True:
+    travel.clear()
+    avail_popularity.clear()
+    travel.append((I_HOTEL, POP_HOTEL, adj_matrix[I_HOTEL][I_HOTEL])) # go to hotel
+    randomBeginTravel()
+    findGreedyTravel()
+    goBackHotel()
+    
+    # print quality of travel
+    score = calculatePop(travel)
+    if best < score:
+        best = score
+        print(score)
+        if '-p' in options: # Print result
+            printTravel()
+# END OF MAIN
+
+
+
+
