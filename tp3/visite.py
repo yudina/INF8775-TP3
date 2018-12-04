@@ -8,7 +8,7 @@ options = sys.argv[2:]
 n_sites = 0
 adj_matrix = [] # row will be start point, while column will be endpoint
 max_time = 0
-popularity = []
+popularity = [] # 1d array
 
 # probabilistic
 I_HOTEL = 0
@@ -22,7 +22,7 @@ I_TIME = 2
 best = 0 # best score
 
 # greedy
-avail_popularity = []
+avail_popularity = [] # array of indexes of popularity
 
 # go back
 N_BACKTRACK = 5
@@ -110,7 +110,7 @@ def calculatePop(trav):
 
 # return de density matrix for the row i_current_site (last site of the travel)
 def calculateDensityLine(i_current_site):
-    d_line = []
+    d_line = [] # tuplet : density, index of column
     for i in range(n_sites):
         if (adj_matrix[i_current_site][i] != 0):
             d_line.append( (popularity[i]/adj_matrix[i_current_site][i], i) )
@@ -122,12 +122,14 @@ def calculateDensityLine(i_current_site):
 # density (a density which column corresponds to a free n in avail_popularity)
 def maxDensity(d_line, a_popularity):
     sorted_d_line = []
+    i_column = 1
     
+    # tuplet : density, index of column. density is first, it allows to use sorted
     sorted_d_line = sorted(d_line, key=lambda x: x[0], reverse=True)
     
     for i in range(len(sorted_d_line)):
-        if(sorted_d_line[i][1] in a_popularity):
-            return sorted_d_line[i][1]
+        if(sorted_d_line[i][i_column] in a_popularity):
+            return sorted_d_line[i][i_column]
     return 0
 
 def findGreedyTravel():
@@ -178,10 +180,10 @@ def goBackHotel():
         return
     else:
         for i in range(N_BACKTRACK):
-            if(travel[-1][0] != I_HOTEL):
+            if(travel[-1][I_SITE] != I_HOTEL):
                 travel.remove(travel[-1])
                 
-                new_time = adj_matrix[travel[-1][0]][I_HOTEL]
+                new_time = adj_matrix[travel[-1][I_SITE]][I_HOTEL]
                 
                 if (calculateCumul(travel) + new_time <= max_time):
                     travel.append( (I_HOTEL, POP_HOTEL, new_time) )
