@@ -70,8 +70,8 @@ def randomBeginTravel():
     global cumul_time
     global avail_popularity
     
-    # generate n_sites*0.6 random indexes for the beginning of the travel
-    n_random_sites = int( ((n_sites*27/31)-5) )
+    # generate n_sites*0.35 random indexes for the beginning of the travel
+    n_random_sites = int( (n_sites)*0.35 ) # *27/31)-5) )
     i_random_sites = random.sample(range(1, n_sites), n_random_sites)
     
     cumul_time = 0
@@ -85,7 +85,7 @@ def randomBeginTravel():
             # add the next random site.
             # index, popularity, travel time
             if (cumul_time + new_time <= max_time):
-                travel.append((i_random_sites[i], popularity[i_random_sites[i]], adj_matrix[i_previous_site][i_random_sites[i]]))
+                travel.append((i_random_sites[i], popularity[i_random_sites[i]], new_time))
                 cumul_time += new_time
             else: # max_time reached
                 break
@@ -95,7 +95,10 @@ def randomBeginTravel():
     # copy popularity, and remove visited sites in the copy
     # visited is reversed, so we delete elements in decreasing order of index
     visited = sorted(i_random_sites, key=int, reverse=True)
-    avail_popularity = popularity.copy()
+    avail_popularity = []
+    
+    for i in range(len(popularity)):
+        avail_popularity.append((i, popularity[i]))
     
     for i in range(len(visited)):
         j = visited[i]
@@ -105,6 +108,12 @@ def calculate_cumul(trav):
     total = 0
     for i in range(len(trav)):
         total += trav[i][2]
+    return total
+
+def calculate_pop(trav):
+    total = 0
+    for i in range(len(trav)):
+        total += trav[i][1]
     return total
     
 # THE MAIN
@@ -125,26 +134,45 @@ randomBeginTravel();
 
 # END OF THE MAIN
 
-i_current_site = travel[-1][0]
 
 
-density_line = [] # [0 for x in range(n_sites)]
 
-for i in range(n_sites):
-    if (adj_matrix[i_current_site][i] != 0):
-        density_line.append( (popularity[i]/adj_matrix[i_current_site][i], i) )
+
+
+def calculateDensityLine():
+    d_line = [] # [0 for x in range(n_sites)]
+    i_current_site = travel[-1][0]
+    for i in range(n_sites):
+        if (adj_matrix[i_current_site][i] != 0):
+            d_line.append( (popularity[i]/adj_matrix[i_current_site][i], i) )
+        else:
+            d_line.append( (0, i) )
+    return d_line
+    
+    
+density_line = []
+
+avail = len(avail_popularity)
+for i in range(avail):
+    if(calculate_cumul(travel) <= max_time):
+        density_line = calculateDensityLine()
+        
+        i_current_site = travel[-1][0]
+        max_density = density_line.index(max(density_line))
+        i_max_density = density_line[max_density][1]
+        
+        new_time = adj_matrix[i_current_site][i_max_density]
+        
+        # add the next random site.
+        # index, popularity, travel time
+        if (cumul_time + new_time <= max_time):
+            travel.append((i_max_density, popularity[i_max_density], new_time))
+            cumul_time += new_time
+            avail
+        else: # max_time reached
+            break
     else:
-        density_line.append( (0, i) )
-
-max_density = density_line.index(max(density_line))
-print(max_density)
-print(density_line)
-
-#for i in range(len(avail_popularity)):
-#    if(calculate_cumul(travel) <= max_time*0.75):
-#        
-        
-        
+        break
         
         
 
