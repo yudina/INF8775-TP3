@@ -25,4 +25,4 @@ esac
 shift
 done
 
-python3 ./visite.py $EX_PATH $OPTIONS
+py ./visite.py $EX_PATH $OPTIONS
